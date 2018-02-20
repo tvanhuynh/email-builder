@@ -1,0 +1,145 @@
+/* variables */
+
+:root {
+    --blue: #005288;
+}
+
+
+/* import page */
+
+.whole-page-flex {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-family: Arial, Helvetica, sans-serif;
+    flex-flow: column nowrap;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 11;
+}
+
+.background--blue {
+    background-color: var(--blue);
+}
+
+#import-input {
+    border: solid 2px #ffffff;
+    display: flex;
+    position: relative;
+    opacity: 1;
+    transition: all .25s ease;
+}
+
+#import-input:hover {
+    opacity: .75;
+}
+
+#import-input__button {
+    background-color: #ffffff;
+    color: #005288;
+    padding: 10px 15px;
+    font-weight: bold;
+}
+
+#import-input__file-name {
+    padding: 10px;
+}
+
+#import-input__input {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+}
+
+#import-input__input:hover {
+    cursor: pointer;
+}
+
+
+/* template blocks sidebar */
+
+#template-blocks {
+    position: absolute;
+    width: 20vw;
+    background-color: #ffffff;
+    top: 0;
+    right: 0;
+    line-height: 1.5;
+    box-shadow: 0 0 20px rgba(0, 0, 0, .075);
+    z-index: 10;
+    height: 100vh;
+    overflow: scroll;
+}
+
+#template-blocks ul {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+    padding: 20px 30px;
+}
+
+.template-blocks__block {
+    padding-bottom: 40px;
+    border-bottom: 1px solid #e5e5e5;
+    margin-bottom: 40px;
+}
+
+.template-blocks__block:last-of-type {
+    padding-bottom: 0;
+    margin-bottom: 0;
+    border-bottom: 0;
+}
+
+.template-block__title {
+    font-size: 13px;
+    color: var(--blue);
+    margin: 0;
+    margin-bottom: 5px;
+}
+
+.template-block__title--white {
+    color: #ffffff;
+    text-align: center;
+    padding: 15px 10px;
+}
+
+.template-block__description {
+    font-size: 12px;
+    color: #808080;
+}
+
+.template-block__image {
+    width: 100%;
+    opacity: 1;
+    transition: all .25s ease;
+}
+
+.template-block__image:hover, #import-template:hover {
+    opacity: .75;
+    cursor: pointer;
+}
+
+#import-template {
+    background-color: var(--blue);
+    position: relative;
+    transition: all .25s ease;
+}
+
+#import-template__input {
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    background-color: red;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#import-template__input:hover {
+    cursor: pointer;
+}
