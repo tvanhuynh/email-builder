@@ -17,6 +17,7 @@
     justify-content: center;
     color: #ffffff;
     font-family: Arial, Helvetica, sans-serif;
+    font-size: 13px;
     flex-flow: column nowrap;
     position: absolute;
     top: 0;
@@ -67,7 +68,8 @@
 
 #template-blocks {
     position: absolute;
-    width: 20vw;
+    font-family: Arial, Helvetica, sans-serif;
+    width: 250px;
     background-color: #ffffff;
     top: 0;
     right: 0;
@@ -85,7 +87,7 @@
     text-transform: uppercase;
     letter-spacing: .15em;
     position: fixed;
-    width: 20vw;
+    width: 250px;
     height: 50px;
     top: 0;
     right: 0;
@@ -111,6 +113,12 @@
     box-shadow: -1px 1px 2px rgba(0, 0, 0, .075);
     transition: all .25s ease;
     background-color: #ffffff;
+    position: relative;
+    overflow: hidden;
+}
+
+.template-blocks__block:hover::after {
+    opacity: 1;
 }
 
 .template-blocks__block:hover {
@@ -178,6 +186,8 @@
     align-items: center;
     justify-content: center;
     transition: all .25s ease;
+    font-family: Arial, Helvetica, sans-serif;    
+    margin-top: 50px;
 }
 #import-email__button {
     color: #ffffff;
@@ -214,12 +224,9 @@
     font-size: 13px;
     margin-left: 20px;
     transition: all .25s ease;
+    font-family: Arial, Helvetica, sans-serif;
+    margin-top: 50px;
 }
-
-body {
-    margin-right: 20vw;
-}
-
 .material-icon {
     font-family: 'Material Icons';
 }
@@ -235,7 +242,7 @@ body {
     color: var(--blue);
     transition: all .25s ease;
     font-weight: bold;
-    opacity: .5;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 .opacity--1 {
@@ -248,18 +255,30 @@ body {
 
 .email-block {
     position: relative;
+    overflow: hidden;
 }
 
 .email-block:hover .email-block__exit-icon{
     opacity: 1;
     cursor: pointer;
-    right: -30px;
+    right: calc(50% - 300px - 50px);
 }
 
 .email-block:hover .email-block__move-icon{
     opacity: 1;
+    cursor: move;
+    left: calc(50% - 300px - 50px);
+}
+
+.email-block:hover .email-block__duplicate-icon{
+    opacity: 1;
     cursor: pointer;
-    left: -30px;
+    left: calc(50% - 300px - 80px);
+}
+
+.email-block:hover .block-line {
+    opacity: 1;
+    height: 100%;
 }
 
 .email-block__exit-icon {
@@ -267,7 +286,7 @@ body {
     font-size: 15px;
     position: absolute;
     top: 0;
-    right: -15px;
+    right: calc(50% - 300px - 75px);
     transition: all .25s ease;
     background-color: var(--blue);
     height: 25px;
@@ -284,7 +303,24 @@ body {
     font-size: 15px;
     position: absolute;
     top: 0;
-    left: -15px;
+    left: calc(50% - 300px - 75px);
+    transition: all .25s ease;
+    background-color: var(--blue);
+    height: 25px;
+    width: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    opacity: 0;
+}
+
+.email-block__duplicate-icon {
+    font-family: 'Material Icons';
+    font-size: 12px;
+    position: absolute;
+    top: 0;
+    left: calc(50% - 300px - 125px);
     transition: all .25s ease;
     background-color: var(--blue);
     height: 25px;
@@ -300,8 +336,20 @@ body {
     background-color: #ff0000;
 }
 
-.email-block__move-icon:hover {
+.email-block__move-icon:hover, .email-block__duplicate-icon:hover {
     background-color: var(--orange);
+}
+
+.block-line {
+    display: block;
+    height: 0;
+    width: 3px;
+    background-color: var(--blue);
+    position: absolute;
+    top: 0;
+    left: calc(50% - 300px - 13px);
+    opacity: 0;
+    transition: all .25s ease;
 }
 
 /* controls */
@@ -336,5 +384,5 @@ body {
 }
 
 .unwrap {
-    display: inline-block;
+    transition: all .25s ease;
 }

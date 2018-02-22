@@ -8,19 +8,20 @@ class EmailBuilder extends Component {
     hasInitiated: false,
     blocks: [],
     templateBlocks: [],
-    dragBlockIndex: null,
-    dragging: false,
-    blockToBeDraggedKey: null,
   }
 
   constructor(props) {
     super(props);
     this.blocksKey = 0;
+    this.draggedBlock = null;
+    this.headerBlocks = [];
+    this.footerBlocks = [];
   }
 
   componentDidUpdate() {
     console.log(this.state);
   }
+
 
   /**
    * Read imported file and extract block templates
@@ -40,17 +41,25 @@ class EmailBuilder extends Component {
 
       isTemplate = file.target.result.includes("</body>") ? false : true;
       if (isTemplate) {
-        let allBlocks = [...importedHTML.getElementsByClassName('block')];
+        const headerBlocks = [...importedHTML.getElementsByClassName('header-block')];
+        this.headerBlocks = headerBlocks.map(i => {
+          this.blocksKey++;
+          return (<Block EmailBuilder={this} key={this.blocksKey} HTML={i} />);
+        });
+        
+        const footerBlocks = [...importedHTML.getElementsByClassName('footer-block')];
+        this.footerBlocks = footerBlocks.map(i => {
+          this.blocksKey++;
+          return (<Block EmailBuilder={this} key={this.blocksKey} HTML={i} />);
+        });
+        
+        const allBlocks = [...importedHTML.getElementsByClassName('block')];
         let templateBlocks = allBlocks.filter(i => i.dataset.name);
         
         templateBlocks = templateBlocks.map(i => <TemplateBlock EmailBuilder={this} key={i.dataset.name} HTML={i} />);
         this.setState({templateBlocks: templateBlocks});
 
         this.defaultHTML = allBlocks;
-
-        if (!this.state.hasInitiated) {
-          this.moveDropArea(0);
-        }
       }
     }
 
@@ -62,9 +71,12 @@ class EmailBuilder extends Component {
           return <Block EmailBuilder={this} key={this.blocksKey} HTML={i} />
         })
         this.setState({blocks: blocks});
+      } else {
+        let style = [...importedHTML.getElementsByTagName('style')];
+        style.forEach(i => document.getElementsByTagName('head')[0].appendChild(i));
       }
 
-      this.setState({hasInitiated: true})
+      this.setState({hasInitiated: true});
 
       // get parent table styles + set in email
       let parentTable = importedHTML.getElementsByTagName('table')[0];
@@ -79,89 +91,171 @@ class EmailBuilder extends Component {
     reader.readAsText(file)
   }
 
+
   /**
    * Start a new email. Updates the state to the default HTML.
    * @returns {null}
    */
   resetEmail = () => {
-
     let blocks = this.defaultHTML.map(i => {
       this.blocksKey++;
       return <Block EmailBuilder={this} key={this.blocksKey} HTML={i} />
     })
-    
     this.setState({blocks: blocks})
   }
 
+
   /**
-   * Handle block drop event
+   * Append a draggable area to the blocks
+   * @param {number} i - index to append the draggable area to
+   * @returns {object} draggableArea JSX
+   */
+  appendDraggableArea = (i = null) => {
+    let draggableArea = (
+      <div
+      id="draggable-area"
+      key="drag"
+      onDrop={this.dropTemplate}
+      onDragOver={this.eventPreventDefault}
+      >
+        Place template block here.
+      </div>
+    )
+    
+    let temp = [...this.state.blocks];
+
+    let oldDrag = this.state.blocks.findIndex(i => i.key === "drag");
+    if (oldDrag !== -1) temp.splice(oldDrag, 1);
+
+    if (i !== null) temp.splice(i, 0, draggableArea);
+
+    this.setState({blocks: temp});
+
+    return draggableArea;
+  }
+
+
+  /**
+   * Handle template drop event
    * @param {object} event - event passed
    * @return {null}
    */
-  dropBlock = event => {
+  dropTemplate = event => {
     event.preventDefault();
-    let block = document.createElement( 'html' );
-    block.innerHTML = event.dataTransfer.getData("text/html");
-    let temp = [...this.state.blocks];
+    
+    // create block
+    let data = document.createElement('html');
+    data.innerHTML = event.dataTransfer.getData('text/html');
+    data = data.getElementsByClassName('block')[0]
     this.blocksKey++;
-    block = <Block EmailBuilder={this} key={this.blocksKey} HTML={block.getElementsByClassName('block')[0]} />;
-    temp.splice(this.state.dragBlockIndex + 1, 0, block);
-    temp.splice(this.state.dragBlockIndex, 1);
-    let index = temp.findIndex(i => i.key === this.state.blockToBeDraggedKey);
-    temp.splice(index, 1);
-    this.setState({blocks: temp, blockToBeDraggedKey: null, dragBlockIndex: null});
+    let block = <Block EmailBuilder={this} HTML={data} key={this.blocksKey}/>
+
+    // swap block with draggable area
+    let index = this.state.blocks.findIndex(i => i.key === "drag");
+    let temp = [...this.state.blocks];
+    temp.splice(index, 1, block);
+    this.setState({blocks: temp})
   }
+
+
+  /**
+   * Update the dragged block status
+   * @returns {null}
+   */
+  updateDraggedBlock = key => {
+    let i = this.state.blocks.findIndex(i => i.key === key);
+    let temp = [...this.state.blocks];
+    this.draggedBlock = temp.splice(i, 1)[0];
+  }
+
+
+  /**
+   * Append movable block
+   * @param {number} i - index to append the movable blcok to
+   * @returns {null}
+   */
+
+   appendMovableBlock = (i) => {
+     let temp = [...this.state.blocks];
+
+     let oldBlock = this.state.blocks.findIndex(i => i.key === this.draggedBlock.key);
+     if (oldBlock !== -1) temp.splice(oldBlock, 1);
+
+     temp.splice(i, 0, this.draggedBlock);
+
+     this.setState({blocks: temp})
+   }
+
+
+  /**
+   * Prevent event default from happening for easier reading
+   * @param {object} event - event passed
+   * @return {null}
+   */
+   eventPreventDefault = event => {
+     event.preventDefault();
+   }
+
+
+  /**
+   * Destroy block
+   * @param {number} i - index of block to destroy
+   * @returns {null}
+   */
+   destroy = i => {
+     let temp = [...this.state.blocks];
+     temp.splice(i, 1);
+     this.setState({blocks: temp})
+   }
+
+  /**
+   * Create a new block and append to existing blocks
+   * @param {number} i - index to append to the existing block
+   * @param {string} html - html to be fed through the Block's property
+   * @returns {null}
+   */
+
+  duplicate = (i, html) => {
+    this.blocksKey++;
+    let block = <Block EmailBuilder={this} key={this.blocksKey} HTML={html} />
+    let temp = [...this.state.blocks];
+    temp.splice(i, 0, block);
+    this.setState({blocks: temp});
+  }
+
 
   /**
    * Save the email file by downloading it
-   * @return {null}
+   * @returns {null}
    */
   download = () => {
     //to do
   }
 
   /**
-   * Append and remove drop areas.
-   * @param {number} append - index to append draggable area, will not append if null
-   * @return {null}
+   * Print blocks
+   * @returns {object} JSX of objects or options to import / start new
    */
-  moveDropArea = (append = null) => {
-    let temp = [...this.state.blocks];
-    if (this.state.dragBlockIndex !== null) temp.splice(this.state.dragBlockIndex, 1);
+  printBlocks = () => {
+    if (this.state.blocks.length === 0) {
+      return (
+        <div>
+          <div id="import-email">
+            <h2 id="import-email__button">Import an old email.</h2>
+            <input id="import-email__input" type="file" accept=".html" onChange={this.readEmailImport} />
+          </div>
+          {/* Check if there's a template to start new email from. */}
+          {(() => {if (this.state.templateBlocks.length > 0){ return (
+              <div id="start-new-email" onClick={this.resetEmail}>
+                Start a new email.
+              </div>
+          ) }})()}
 
-    if (append !== null) {
-      let draggableArea = (
-        <div id="draggable-area"
-        key="drag"
-        onDragEnter={event => {event.preventDefault(); event.target.classList.add('opacity--1')}}
-        onDragLeave={event => {event.target.classList.remove('opacity--1')}}
-        onDragOver={event => {event.preventDefault();}}
-        onDrop={this.dropBlock}
-        >
-          Place template block here.
         </div>
-      );
-      temp.splice(append, 0, draggableArea);
-
-      this.setState({dragBlockIndex: append})
+      )
     } else {
-      this.setState({dragBlockIndex: null})
+      return [...this.headerBlocks, ...this.state.blocks, ...this.footerBlocks];
     }
-
-
-    this.setState({blocks: temp})
-  }
-
-  /**
-   * Destroy block.
-   * @param {number} i - index of block to destroy
-   * @return {null}
-   */
-
-  destroy = i => {
-    let temp = [...this.state.blocks];
-    temp.splice(i, 1);
-    this.setState({blocks: temp})    
   }
 
   render() {
@@ -171,20 +265,9 @@ class EmailBuilder extends Component {
         <div id="email-builder-app" className="unwrap">
 
           <table id="parent-table" width="100%" style={this.state.mainBodyStyle} ><tbody><tr><td align="center">
-          {this.state.blocks}
-            {(() => {if(this.state.blocks.length <= 1 && this.state.blocks[0].key === "drag") {
-              return (
-                <div>
-                  <div id="import-email">
-                    <h2 id="import-email__button">Import an old email.</h2>
-                    <input id="import-email__input" type="file" accept=".html" onChange={this.readEmailImport} />
-                  </div>
-                  <div id="start-new-email" onClick={this.resetEmail}>
-                    Start a new email.
-                  </div>
-                </div>
-              )
-            }})()}
+
+          {this.printBlocks()}
+
           </td></tr></tbody></table>
 
           <figure id="download" onClick={this.download}>

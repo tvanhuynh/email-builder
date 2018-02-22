@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import '../styles/EmailBuilder.css';
 
 class Block extends Component {
   state = {
     html: this.props.HTML,
     moveIconSelected: false,
+    mandatory: this.props.HTML
   }
 
   constructor(props) {
@@ -12,62 +12,137 @@ class Block extends Component {
     this.state.html.removeAttribute('data-name');
     this.state.html.removeAttribute('data-description');
     this.state.html.removeAttribute('data-image');
+    let temp = [...this.props.HTML.classList];
+    this.mandatory = temp.includes("mandatory") || temp.includes("header-block") || temp.includes("footer-block");
+    this.fixed = temp.includes("header-block") || temp.includes("footer-block");
+    this.unique = temp.includes("unique") || temp.includes("header-block") || temp.includes("footer-block");
   }
 
-  onDragStart = event => {
-    event.target.classList.add('opacity--35');
-    this.props.EmailBuilder.setState({dragging: true, blockToBeDraggedKey: this._reactInternalFiber.key});
-    event.dataTransfer.setData("text/html", this.props.HTML.outerHTML);
+  destroy = () => {
+    let i = this.props.EmailBuilder.state.blocks.findIndex(i => i.key === this._reactInternalFiber.key);
+    this.props.EmailBuilder.destroy(i)
   }
 
-  onDragEnd = event => {
-    this.props.EmailBuilder.setState({dragging: false});
-    event.target.classList.remove('opacity--35');
-    if (this.props.EmailBuilder.state.blocks.length > 1) this.props.EmailBuilder.moveDropArea();
-    this.setState({moveIconSelected: false});
+  duplicate = () => {
+    let i = this.props.EmailBuilder.state.blocks.findIndex(i => i.key === this._reactInternalFiber.key);
+    this.props.EmailBuilder.duplicate(i, this.props.HTML);
   }
 
-  createDropArea = () => {
-    if (this.props.EmailBuilder.state.dragging) {
-      let index = this.props.EmailBuilder.state.blocks.findIndex(i => i.key === this._reactInternalFiber.key);
-      this.props.EmailBuilder.moveDropArea(index);
+  blockStartDrag = event => {
+    this.props.EmailBuilder.updateDraggedBlock(this._reactInternalFiber.key)
+    
+    // create ghost drag
+    let temp = document.createElement('div');
+    temp.innerHTML = "&nbsp;";
+    temp.id = "ghost-drag";
+    temp.style.opacity = 0;
+    document.getElementsByTagName('body')[0].appendChild(temp);
+    event.dataTransfer.setDragImage(temp, 0, 0);
+
+    // styling
+    event.target.style.opacity = .5;
+    temp = document.getElementsByClassName("block-icon");
+    for (let i = 0; i < temp.length; i++) {
+      temp[i].style.display = 'none';
+    }
+  }
+  
+  blockEndDrag = event => {
+    this.props.EmailBuilder.draggedBlock = null;
+
+    // remove ghost drag
+    document.getElementById('ghost-drag').remove();
+
+    // styling
+    event.target.style.opacity = 1;
+    let temp = document.getElementsByClassName("block-icon");
+    for (let i = 0; i < temp.length; i++) {
+      temp[i].style.display = 'flex';
     }
   }
 
-  selectMoveIcon = event => {
-    this.setState({moveIconSelected: true});
+  dragEnterBlock = event => {
+    let i = this.props.EmailBuilder.state.blocks.findIndex(i => i.key === this._reactInternalFiber.key);
+    if(this.props.EmailBuilder.draggedBlock === null) { // template
+      this.props.EmailBuilder.appendDraggableArea(i)
+    } else { // block
+      this.props.EmailBuilder.appendMovableBlock(i)
+    }
   }
 
-  getIndexAndDestroy = () => {
-    let i = this.props.EmailBuilder.state.blocks.findIndex(i => i.key === this._reactInternalFiber.key);
-    this.props.EmailBuilder.destroy(i)
+  exitIcon = () => {
+    if (!this.mandatory) {
+      return (
+        <span
+        className="destroy block-icon email-block__exit-icon"
+        title="delete"
+        onClick={this.destroy}
+        >
+          close
+        </span>
+      )
+    }
+  }
+
+  moveIcon = () => {
+    if (!this.fixed) {
+      return (
+        <span
+          className="destroy block-icon email-block__move-icon"
+          title="move"
+          onMouseUp={() => this.setState({moveIconSelected: false})}
+          onMouseDown={() => this.setState({moveIconSelected: true})}
+          >
+            swap_vert
+          </span>
+      )
+    }
+  }
+
+  duplicateIcon = () => {
+    if (!this.unique) {
+      return (
+        <span
+        className="destroy block-icon email-block__duplicate-icon"
+        title="duplicate"
+        onClick={this.duplicate}
+        >
+          filter_none
+        </span>
+      )
+    }
+  }
+
+  blockLine = () => {
+    if (!this.fixed && this.props.EmailBuilder.draggedBlock === null) {
+      return (
+        <span
+          className="destroy block-line block-icon"
+          />
+      )
+    }
   }
 
   render() {
       return (
           <div 
+          className="unwrap email-block line-break-after"
           draggable={this.state.moveIconSelected}
-          className="unwrap email-block"
-          onDragEnter={this.createDropArea}
-          onDragStart={this.onDragStart}
-          onDragEnd={this.onDragEnd}
+          onDragEnter={this.dragEnterBlock}
+          onDragLeave ={this.dragLeaveBlock}
+          onDragStart={this.blockStartDrag}
+          onDragEnd={this.blockEndDrag}
           >
-          <span
-          className="destroy email-block__exit-icon"
-          title="delete"
-          onClick={this.getIndexAndDestroy}
-          >
-            close
-          </span>
-          <span
-          onMouseDown={this.selectMoveIcon}
-          onMouseUp={this.deselectMoveIcon}
-          className="destroy email-block__move-icon"
-          title="move"
-          >
-            swap_vert
-          </span>
-          <div className="unwrap" dangerouslySetInnerHTML={{__html: this.state.html.outerHTML}}/>
+            {this.exitIcon()}
+
+            {this.moveIcon()}
+            
+            {this.duplicateIcon()}
+
+            {this.blockLine()}
+
+            <div className="unwrap" dangerouslySetInnerHTML={{__html: this.state.html.outerHTML}}/>
+            
           </div>
       )
   }

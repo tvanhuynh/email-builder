@@ -1,24 +1,21 @@
 import React, { Component } from 'react';
-import Block from './Block';
-import '../styles/EmailBuilder.css';
 
-class EmailBuilder extends Component {
-  onDragStart = event => {
-      this.props.EmailBuilder.setState({dragging: true});
-      event.dataTransfer.setData("text/html", this.props.HTML.outerHTML)
+class TemplateBlock extends Component {
+  templateStartDrag = event => {
+    event.dataTransfer.setData('text/html', this.props.HTML.outerHTML);
   }
 
-  onDragEnd = () => {
-    this.props.EmailBuilder.setState({dragging: false});
-    if (this.props.EmailBuilder.state.blocks.length > 1) this.props.EmailBuilder.moveDropArea();
+  tempalteEndDrag = event => {
+    this.props.EmailBuilder.appendDraggableArea();
   }
 
   render() {
       return (
         <li className="template-blocks__block"
             draggable='true'
-            onDragStart={this.onDragStart}
-            onDragEnd={this.onDragEnd}
+            onDragStart={this.templateStartDrag}
+            onDragEnd={this.tempalteEndDrag}
+            title="Drag and drop this tile to add to the email."
             >
             <h2 className="template-block__title">{this.props.HTML.dataset.name}</h2>
             <img className="template-block__image" src={this.props.HTML.dataset.image} alt="" draggable="false"/>
@@ -28,4 +25,4 @@ class EmailBuilder extends Component {
   }
 }
 
-export default EmailBuilder;
+export default TemplateBlock;
