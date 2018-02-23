@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
+var MediumEditor = require('medium-editor');
+var rangy = require('rangy');
+require('rangy/lib/rangy-classapplier.js');
 
 class Block extends Component {
   state = {
     html: this.props.HTML,
     moveIconSelected: false,
-    mandatory: this.props.HTML
+    mandatory: this.props.HTML,
+    colors: this.props.EmailBuilder.state.colors,
   }
 
   constructor(props) {
@@ -12,10 +16,23 @@ class Block extends Component {
     this.state.html.removeAttribute('data-name');
     this.state.html.removeAttribute('data-description');
     this.state.html.removeAttribute('data-image');
+
     let temp = [...this.props.HTML.classList];
     this.mandatory = temp.includes("mandatory") || temp.includes("header-block") || temp.includes("footer-block");
     this.fixed = temp.includes("header-block") || temp.includes("footer-block");
     this.unique = temp.includes("unique") || temp.includes("header-block") || temp.includes("footer-block");
+    
+    [...this.state.html.getElementsByTagName('img')].forEach(i => i.setAttribute("draggable", "false"));
+    [...this.state.html.getElementsByTagName('a')].forEach(i => {
+      i.setAttribute("draggable", "false");
+    });
+
+    let colors = [...this.props.HTML.getElementsByClassName('colors')].pop();
+    if (colors) {
+      colors = [...colors.getElementsByTagName('li')];
+      colors = colors.map(i => i.innerHTML);
+      if (colors.length) this.setState({colors: colors});
+    }
   }
 
   destroy = () => {
@@ -123,10 +140,90 @@ class Block extends Component {
     }
   }
 
+  edit = event => {
+    event.preventDefault();
+    let classes = [...event.target.classList];
+
+    // check if parent is editable
+    let parentIsEditable = false, parent;
+    let temp = event.target ? event.target : [];
+    while (temp) {
+      if ([...temp.classList].includes('editable')) {
+        parent = temp;
+        temp = false;
+        parentIsEditable = true;
+      }
+      temp = temp.parentNode;
+    }
+
+    if (classes.includes('editable') || parentIsEditable) {
+      if (event.target.tagName === "IMG") {
+        // console.log('this is an editable image')
+      } else if (event.target.tagName === "A") {
+        // IMAGE   
+      } else {
+        // TEXT
+        if (this.props.EmailBuilder.textEditor.elements[0] !== event.target) {
+          this.props.EmailBuilder.textEditor.destroy();
+
+          let extensions = {};
+          this.state.colors.forEach(i => {
+            this[i] = MediumEditor.Extension.extend({
+              name: i,
+            
+              init: function () {
+                this.button = this.document.createElement('button');
+                this.button.classList.add('medium-editor-action');
+                this.button.style.backgroundColor = i;
+                this.on(this.button, 'click', this.handleClick.bind(this));
+                this.classApplier = rangy.createClassApplier('unwrap-color', {
+                  elementTagName: 'span',
+                  normalize: true,
+                  elementAttributes: {
+                    style: "color: " + i
+                  }
+                });
+              },
+            
+              getButton: function () {
+                return this.button;
+              },
+          
+              handleClick: function (event) {
+                this.classApplier.toggleSelection();
+                this.base.checkContentChanged();
+              }
+            });
+            extensions[i] = new this[i]();
+          })
+
+          let target = classes.includes('editable') ? event.target : parent;
+
+          this.props.EmailBuilder.textEditor = new MediumEditor(target, {
+            toolbar: {
+              buttons: ['bold', 'italic', 'underline', 'anchor', 'highlighter', ...Object.values(extensions)],
+            },
+            extensions: extensions,
+          });
+        }
+      }
+    } else if (classes.includes('editable-fixed')) {
+      // console.log('this item is editable-fixed')
+    }
+
+    // destroy medium editor if something else is selected.
+    if (!(classes.includes('editable') && event.target.tagName !== "IMG" && event.target.tagName !== "A")
+      || !parentIsEditable
+    ) {
+      this.props.EmailBuilder.textEditor.destroy();
+    }
+
+    console.log(this.props.EmailBuilder.textEditor)
+  }
   render() {
       return (
           <div 
-          className="unwrap email-block line-break-after"
+          className="unwrap email-block"
           draggable={this.state.moveIconSelected}
           onDragEnter={this.dragEnterBlock}
           onDragLeave ={this.dragLeaveBlock}
@@ -141,7 +238,7 @@ class Block extends Component {
 
             {this.blockLine()}
 
-            <div className="unwrap" dangerouslySetInnerHTML={{__html: this.state.html.outerHTML}}/>
+            <div className="unwrap" onClick={this.edit} dangerouslySetInnerHTML={{__html: this.state.html.outerHTML}}/>
             
           </div>
       )

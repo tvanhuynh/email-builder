@@ -2,12 +2,14 @@ import React, { Component } from 'react';
 import Block from './Block';
 import TemplateBlock from './TemplateBlock';
 import '../styles/EmailBuilder.css';
+var MediumEditor = require('medium-editor');
 
 class EmailBuilder extends Component {
   state = {
     hasInitiated: false,
     blocks: [],
     templateBlocks: [],
+    colors: [],
   }
 
   constructor(props) {
@@ -16,10 +18,11 @@ class EmailBuilder extends Component {
     this.draggedBlock = null;
     this.headerBlocks = [];
     this.footerBlocks = [];
+    this.textEditor = new MediumEditor();
   }
 
   componentDidUpdate() {
-    console.log(this.state);
+    // console.log(this.state);
   }
 
 
@@ -60,6 +63,11 @@ class EmailBuilder extends Component {
         this.setState({templateBlocks: templateBlocks});
 
         this.defaultHTML = allBlocks;
+
+        let colors = [...importedHTML.getElementsByClassName('colors')].pop();
+        colors = [...colors.getElementsByTagName('li')];
+        colors = colors.map(i => i.innerHTML);
+        this.setState({colors: colors})
       }
     }
 

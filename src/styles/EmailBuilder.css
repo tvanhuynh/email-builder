@@ -67,7 +67,7 @@
 /* template blocks sidebar */
 
 #template-blocks {
-    position: absolute;
+    position: fixed;
     font-family: Arial, Helvetica, sans-serif;
     width: 250px;
     background-color: #ffffff;
@@ -385,4 +385,28 @@
 
 .unwrap {
     transition: all .25s ease;
+}
+
+/* editable */
+
+.medium-editor-toolbar {
+    background-color: var(--blue);
+}
+
+.medium-toolbar-arrow-under:after {
+    border-color: var(--blue) transparent transparent;
+}
+
+.medium-editor-toolbar li button {
+    border-right-color: var(--lightblue);
+    border-radius: 0;
+}
+
+.medium-editor-toolbar li button:hover {
+    background-color: var(--lightblue);
+    border-radius: 0;
+}
+
+.medium-editor-toolbar-form .medium-editor-toolbar-input {
+    background-color: var(--blue);
 }
