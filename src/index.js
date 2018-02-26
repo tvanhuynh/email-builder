@@ -6,4 +6,5 @@ import EmailBuilder from './scripts/EmailBuilder';
 import registerServiceWorker from './scripts/registerServiceWorker';
 
 ReactDOM.render(<EmailBuilder />, document.getElementById('email-body'));
+
 registerServiceWorker();

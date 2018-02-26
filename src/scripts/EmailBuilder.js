@@ -3,13 +3,14 @@ import Block from './Block';
 import TemplateBlock from './TemplateBlock';
 import '../styles/EmailBuilder.css';
 var MediumEditor = require('medium-editor');
+var rangy = require('rangy');
+require('rangy/lib/rangy-classapplier.js');
 
 class EmailBuilder extends Component {
   state = {
     hasInitiated: false,
     blocks: [],
     templateBlocks: [],
-    colors: [],
   }
 
   constructor(props) {
@@ -18,7 +19,6 @@ class EmailBuilder extends Component {
     this.draggedBlock = null;
     this.headerBlocks = [];
     this.footerBlocks = [];
-    this.textEditor = new MediumEditor();
   }
 
   componentDidUpdate() {
@@ -64,10 +64,10 @@ class EmailBuilder extends Component {
 
         this.defaultHTML = allBlocks;
 
-        let colors = [...importedHTML.getElementsByClassName('colors')].pop();
+        let colors = importedHTML.querySelector('#colors');
         colors = [...colors.getElementsByTagName('li')];
         colors = colors.map(i => i.innerHTML);
-        this.setState({colors: colors})
+        this.colorsExtension = this.getColors(colors);
       }
     }
 
@@ -100,17 +100,9 @@ class EmailBuilder extends Component {
   }
 
 
-  /**
-   * Start a new email. Updates the state to the default HTML.
-   * @returns {null}
-   */
-  resetEmail = () => {
-    let blocks = this.defaultHTML.map(i => {
-      this.blocksKey++;
-      return <Block EmailBuilder={this} key={this.blocksKey} HTML={i} />
-    })
-    this.setState({blocks: blocks})
-  }
+  /*******************************
+   * Block Drag & Drop Functions *
+   *******************************/
 
 
   /**
@@ -124,7 +116,7 @@ class EmailBuilder extends Component {
       id="draggable-area"
       key="drag"
       onDrop={this.dropTemplate}
-      onDragOver={this.eventPreventDefault}
+      onDragOver={event => event.preventDefault()}
       >
         Place template block here.
       </div>
@@ -179,30 +171,25 @@ class EmailBuilder extends Component {
 
   /**
    * Append movable block
-   * @param {number} i - index to append the movable blcok to
+   * @param {number} i - index to append the movable block to
    * @returns {null}
    */
 
-   appendMovableBlock = (i) => {
-     let temp = [...this.state.blocks];
+  appendMovableBlock = (i) => {
+    let temp = [...this.state.blocks];
 
-     let oldBlock = this.state.blocks.findIndex(i => i.key === this.draggedBlock.key);
-     if (oldBlock !== -1) temp.splice(oldBlock, 1);
+    let oldBlock = this.state.blocks.findIndex(i => i.key === this.draggedBlock.key);
+    if (oldBlock !== -1) temp.splice(oldBlock, 1);
 
-     temp.splice(i, 0, this.draggedBlock);
+    temp.splice(i, 0, this.draggedBlock);
 
-     this.setState({blocks: temp})
-   }
+    this.setState({blocks: temp})
+  }
 
 
-  /**
-   * Prevent event default from happening for easier reading
-   * @param {object} event - event passed
-   * @return {null}
-   */
-   eventPreventDefault = event => {
-     event.preventDefault();
-   }
+  /**********************
+  * Block Manipulation *
+  **********************/
 
 
   /**
@@ -222,7 +209,6 @@ class EmailBuilder extends Component {
    * @param {string} html - html to be fed through the Block's property
    * @returns {null}
    */
-
   duplicate = (i, html) => {
     this.blocksKey++;
     let block = <Block EmailBuilder={this} key={this.blocksKey} HTML={html} />
@@ -232,6 +218,67 @@ class EmailBuilder extends Component {
   }
 
 
+/********************
+ * Helper Functions *
+ ********************/
+
+
+  /**
+   * Start a new email. Updates the state to the default HTML.
+   * @returns {null}
+   */
+  resetEmail = () => {
+    let blocks = this.defaultHTML.map(i => {
+      this.blocksKey++;
+      return <Block EmailBuilder={this} key={this.blocksKey} HTML={i} />
+    })
+    this.setState({blocks: blocks})
+  }
+
+
+  /**
+   * Create Color Palette in Editor
+   * @param {array} colors - HEX colors to be utilized in text
+   * @returns {object} extensions of colors to be added to Medium Editor
+   */
+  getColors = colors => {
+    let extensions = {};
+    colors.forEach(i => {
+      this[i] = MediumEditor.Extension.extend({
+        name: i,
+      
+        init: function () {
+          this.button = this.document.createElement('button');
+          this.button.classList.add('medium-editor-action');
+          this.button.style.backgroundColor = i;
+          this.on(this.button, 'click', this.handleClick.bind(this));
+          this.classApplier = rangy.createClassApplier('unwrap-color', {
+            elementTagName: 'span',
+            normalize: true,
+            elementAttributes: {
+              style: "color: " + i
+            }
+          });
+        },
+      
+        getButton: function () {
+          return this.button;
+        },
+    
+        handleClick: function (event) {
+          this.classApplier.toggleSelection();
+          this.base.checkContentChanged();
+        }
+      });
+      extensions[i] = new this[i]();
+    });
+
+    return extensions;
+  }
+
+
+
+
   /**
    * Save the email file by downloading it
    * @returns {null}
@@ -239,6 +286,12 @@ class EmailBuilder extends Component {
   download = () => {
     //to do
   }
+ 
+
+  /********************
+   * Render Functions *
+   ********************/
+
 
   /**
    * Print blocks
@@ -266,6 +319,20 @@ class EmailBuilder extends Component {
     }
   }
 
+  toggleTemplateBlocks = event => {
+    if(this.templateBlocks.classList.contains('template-blocks--visible')) {
+      this.templateBlocks.classList.remove('template-blocks--visible');
+      event.target.classList.remove('template-blocks__toggle--visible')
+      this.templateBlocks.classList.add('template-blocks--hidden');
+      event.target.classList.add('template-blocks__toggle--hidden')
+    } else {
+      this.templateBlocks.classList.add('template-blocks--visible');
+      event.target.classList.add('template-blocks__toggle--visible')
+      this.templateBlocks.classList.remove('template-blocks--hidden');
+      event.target.classList.remove('template-blocks__toggle--hidden')
+    }
+  }
+
   render() {
 
     if (this.state.hasInitiated) {
@@ -278,14 +345,20 @@ class EmailBuilder extends Component {
 
           </td></tr></tbody></table>
 
-          <figure id="download" onClick={this.download}>
+          <figure id="download" className="destroy" onClick={this.download}>
             <span id="download__icon">get_app</span>
             <figcaption id="download__caption">Download</figcaption>
           </figure>
 
-          <div id="template-blocks" className="destroy">
+          <figure id="remove-class" className="destroy">
+            <span id="remove-class__icon">close</span>
+          </figure>
+
+          <div id="template-blocks" className="destroy template-blocks--visible destroy" ref={input => {this.templateBlocks = input}}>
+            <div id="template-blocks__toggle" className="template-blocks__toggle--visible" onClick={this.toggleTemplateBlocks}>
+                Template Blocks
+            </div>
             <ul>
-              <li id="template-blocks__main-title">Template Blocks</li>
               {this.state.templateBlocks.length ? this.state.templateBlocks : (
                 <li id="import-template">
                   <h2 className="template-block__title template-block__title--white">Import Template Blocks</h2>

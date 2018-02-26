@@ -72,36 +72,26 @@
     width: 250px;
     background-color: #ffffff;
     top: 0;
-    right: 0;
     line-height: 1.5;
     box-shadow: 0 0 20px rgba(0, 0, 0, .075);
     z-index: 10;
     height: 100vh;
     overflow-y: scroll;
+    transition: all .25s ease;
 }
 
-#template-blocks__main-title {
-    color: #ffffff;
-    font-weight: bold;
-    background-color: var(--blue);
-    text-transform: uppercase;
-    letter-spacing: .15em;
-    position: fixed;
-    width: 250px;
-    height: 50px;
-    top: 0;
+.template-blocks--visible {
     right: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 10;
+}
+
+.template-blocks--hidden {
+    right: -250px;
 }
 
 #template-blocks ul {
     padding: 0;
     margin: 0;
     list-style-type: none;
-    padding-top: 50px;
     width: 100%;
 }
 
@@ -173,6 +163,40 @@
 
 #import-template__input:hover {
     cursor: pointer;
+}
+
+#template-blocks__toggle {
+    position: fixed;
+    height: 30px;
+    padding: 0 15px;
+    color: #ffffff;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 10px;
+    letter-spacing: .1em;
+    top: 0;
+    background-color: var(--blue);
+    z-index: 11;
+    border-radius: 8px 8px 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all .25s ease;
+    transform: rotate(-90deg);
+    transform-origin: bottom right;
+}
+
+#template-blocks__toggle:hover {
+    cursor: pointer;
+    opacity: .5;
+}
+
+.template-blocks__toggle--visible {
+    right: 250px;
+}
+
+.template-blocks__toggle--hidden {
+    right: 0;
 }
 
 /* email */
@@ -409,4 +433,49 @@
 
 .medium-editor-toolbar-form .medium-editor-toolbar-input {
     background-color: var(--blue);
+}
+
+.medium-editor-toolbar li .medium-editor-button-active {
+    background-color: var(--lightblue);
+}
+
+.editable:focus, .editable-fixed:focus {
+    outline: none;
+}
+
+/* removable */
+.removable, .clearable, .removable-undo, .clearable-undo {
+    transition: all .25s ease;
+}
+
+#remove-class {
+    position: absolute;
+    margin: 0;
+    transition: opacity .25s ease;
+    opacity: 0
+}
+
+#remove-class:hover {
+    opacity: 1 !important;
+    cursor: pointer;
+}
+
+#remove-class__icon:hover {
+    background-color: #ff0000;
+}
+
+#remove-class__icon {
+    font-family: 'Material Icons';
+    color: #ffffff;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--blue);
+    height: 25px;
+    width: 25px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    transition: all .25s ease;
 }
