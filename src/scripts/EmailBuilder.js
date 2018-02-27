@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import Block from './Block';
 import TemplateBlock from './TemplateBlock';
+import ImageEditor from './ImageEditor';
+import LinkEditor from './LinkEditor';
 import '../styles/EmailBuilder.css';
 var MediumEditor = require('medium-editor');
 var rangy = require('rangy');
@@ -22,7 +24,7 @@ class EmailBuilder extends Component {
   }
 
   componentDidUpdate() {
-    // console.log(this.state);
+    console.log(this.state);
   }
 
 
@@ -68,6 +70,8 @@ class EmailBuilder extends Component {
         colors = [...colors.getElementsByTagName('li')];
         colors = colors.map(i => i.innerHTML);
         this.colorsExtension = this.getColors(colors);
+
+        this.imageBank = importedHTML.querySelector('#image-bank').innerHTML;
       }
     }
 
@@ -174,7 +178,6 @@ class EmailBuilder extends Component {
    * @param {number} i - index to append the movable block to
    * @returns {null}
    */
-
   appendMovableBlock = (i) => {
     let temp = [...this.state.blocks];
 
@@ -203,19 +206,31 @@ class EmailBuilder extends Component {
      this.setState({blocks: temp})
    }
 
-  /**
-   * Create a new block and append to existing blocks
-   * @param {number} i - index to append to the existing block
-   * @param {string} html - html to be fed through the Block's property
-   * @returns {null}
-   */
-  duplicate = (i, html) => {
-    this.blocksKey++;
-    let block = <Block EmailBuilder={this} key={this.blocksKey} HTML={html} />
-    let temp = [...this.state.blocks];
-    temp.splice(i, 0, block);
-    this.setState({blocks: temp});
-  }
+   
+   /**
+    * Move block to top of page
+    * @param {number} i - index of block to move
+    * @returns {null}
+    */
+   moveTop = i => {
+     let temp = [...this.state.blocks];
+     let block = temp.splice(i, 1).pop();
+     temp.unshift(block);
+     this.setState({blocks: temp});
+   }
+
+   
+   /**
+    * Move block to bottom of page
+    * @param {number} i - index of block to move
+    * @returns {null}
+    */
+   moveBottom = i => {
+     let temp = [...this.state.blocks];
+     let block = temp.splice(i, 1).pop();
+     temp.push(block);
+     this.setState({blocks: temp});
+   }
 
 
 /********************
@@ -319,6 +334,11 @@ class EmailBuilder extends Component {
     }
   }
 
+  /**
+   * Toggle template blocks
+   * @param {object} event - event click of template block click
+   * @returns {null}
+   */
   toggleTemplateBlocks = event => {
     if(this.templateBlocks.classList.contains('template-blocks--visible')) {
       this.templateBlocks.classList.remove('template-blocks--visible');
@@ -331,6 +351,16 @@ class EmailBuilder extends Component {
       this.templateBlocks.classList.remove('template-blocks--hidden');
       event.target.classList.remove('template-blocks__toggle--hidden')
     }
+  }
+
+
+  /**
+   * Open Link Editor
+   * @param {object} target - the target area that will be edited
+   * @returns {null}
+   */
+  openLinkEditor = target => {
+    this.linkEditor.udpateTarget(target);
   }
 
   render() {
@@ -367,6 +397,9 @@ class EmailBuilder extends Component {
               )}
             </ul>
           </div>
+
+          <ImageEditor bank={this.imageBank} />
+          <LinkEditor ref={input => {this.linkEditor = input}}/>
         </div>
       )
     } else {

@@ -19,7 +19,6 @@ class Block extends Component {
     let temp = [...this.props.HTML.classList];
     this.mandatory = temp.includes("mandatory") || temp.includes("header-block") || temp.includes("footer-block");
     this.fixed = temp.includes("header-block") || temp.includes("footer-block");
-    this.unique = temp.includes("unique") || temp.includes("header-block") || temp.includes("footer-block");
     
     // remove dragging from images and anchor links
     [...this.state.html.getElementsByTagName('img')].forEach(i => i.setAttribute("draggable", "false"));
@@ -58,13 +57,23 @@ class Block extends Component {
 
     // create editor
     let colorExtensions = this.props.EmailBuilder.colorsExtension;
-    this.textEditor = new MediumEditor(this.textEditables, {
-      spellcheck: false,
-      toolbar: {
-        buttons: ['bold', 'italic', 'underline', 'anchor', ...Object.values(colorExtensions)],
-      },
-      extensions: colorExtensions,
-    });
+
+    if (colorExtensions) {
+      this.textEditor = new MediumEditor(this.textEditables, {
+        spellcheck: false,
+        toolbar: {
+          buttons: ['bold', 'italic', 'underline', 'anchor', ...Object.values(colorExtensions)],
+        },
+        extensions: colorExtensions,
+      });
+    } else {
+      this.textEditor = new MediumEditor(this.textEditables, {
+        spellcheck: false,
+        toolbar: {
+          buttons: ['bold', 'italic', 'underline', 'anchor'],
+        }
+      });
+    }
 
     // create editor-fixed
     this.textEditorFixed = new MediumEditor(this.textEditablesFixed, {
@@ -86,7 +95,21 @@ class Block extends Component {
       }
     })
 
+    // reference remove icon
     this.removeIcon = document.getElementById('remove-class');
+
+    // editable links
+    this.self.querySelectorAll('a.editable').forEach(i => {
+      i.onclick = this.openLinkEditor;
+    });
+    this.self.querySelectorAll('a.editable-fixed').forEach(i => {
+      i.onclick = this.openLinkEditor;
+    });
+
+    // editable images
+    this.self.querySelectorAll('img.editable').forEach(i => {
+      i.setAttribute('title', 'click to edit image');
+    })
   }
 
 
@@ -102,9 +125,14 @@ class Block extends Component {
     this.props.EmailBuilder.destroy(i);
   }
 
-  duplicate = () => {
+  moveTop = () => {
     let i = this.props.EmailBuilder.state.blocks.findIndex(i => i.key === this._reactInternalFiber.key);
-    this.props.EmailBuilder.duplicate(i, this.self);
+    this.props.EmailBuilder.moveTop(i);
+  }
+
+  moveBottom = () => {
+    let i = this.props.EmailBuilder.state.blocks.findIndex(i => i.key === this._reactInternalFiber.key);
+    this.props.EmailBuilder.moveBottom(i);
   }
 
 
@@ -190,16 +218,30 @@ class Block extends Component {
     }
   }
 
-  duplicateIcon = () => {
-    if (!this.unique) {
+  moveTopIcon = () => {
+    if (!this.fixed) {
       return (
         <span
-        className="destroy block-icon email-block__duplicate-icon"
-        title="duplicate"
-        onClick={this.duplicate}
-        >
-          filter_none
-        </span>
+          className="destroy block-icon email-block__move-top-icon"
+          title="move to top"
+          onClick={this.moveTop}
+          >
+            publish
+          </span>
+      )
+    }
+  }
+
+  moveBottomIcon = () => {
+    if (!this.fixed) {
+      return (
+        <span
+          className="destroy block-icon email-block__move-bottom-icon"
+          title="move to bottom"
+          onClick={this.moveBottom}
+          >
+            file_download
+          </span>
       )
     }
   }
@@ -216,7 +258,6 @@ class Block extends Component {
 
   removeIconMove = event => {
     var target = event.target;
-    // console.log(target)
 
     while(target !== null &&
       !target.classList.contains('removable') &&
@@ -230,9 +271,11 @@ class Block extends Component {
     if (target === null) return;
 
     if (target.classList.contains('removable-undo') || target.classList.contains('clearable-undo')) {
-      document.getElementById('remove-class__icon').innerHTML = "undo"
+      document.getElementById('remove-class__icon').innerHTML = "undo";
+      document.getElementById('remove-class').setAttribute('title', 'undo remove');
     } else {
-      document.getElementById('remove-class__icon').innerHTML = "close"
+      document.getElementById('remove-class__icon').innerHTML = "close";
+      document.getElementById('remove-class').setAttribute('title', 'remove');
     }
 
     let {top, left, width} = target.getBoundingClientRect();
@@ -246,10 +289,12 @@ class Block extends Component {
     this.removeIcon.style.left = left + scrollLeft + width + 'px';
 
     this.removeIcon.onmouseover = () => {
-      console.log(target)
       if (target.classList.contains('removable-undo')) {
-        target.style.minHeight = 0;
-        target.style.position = target.dataset.position;
+        target.style.maxHeight = "99999999999999999999px";
+        target.style.position = 'static';
+      } else if (target.classList.contains('clearable-undo')) {
+        target.querySelector('.clearable-undo-absolute-position').style.maxHeight = "99999999999999999999px";
+        target.querySelector('.clearable-undo-absolute-position').style.position = "static";
       }
       target.style.opacity = .25;
     };
@@ -262,8 +307,11 @@ class Block extends Component {
       }
 
       if (target.classList.contains('removable-undo')) {
-        target.style.minHeight = "15px";
-        target.style.position = 'absolute'
+        target.style.maxHeight = "15px";
+        target.style.position = 'absolute';
+      } else if (target.classList.contains('clearable-undo')) {
+        target.querySelector('.clearable-undo-absolute-position').style.position = "absolute";
+        target.querySelector('.clearable-undo-absolute-position').style.maxHeight = "15px";
       }
     };
 
@@ -272,16 +320,44 @@ class Block extends Component {
         target.classList.remove('clearable');
         target.classList.add('clearable-undo');
         target.style.opacity = 0;
+        target.innerHTML = "<div class='clearable-undo-absolute-position' >" + target.innerHTML + "</div>"
+        document.getElementById('remove-class__icon').innerHTML = "undo"
 
       } else if (target.classList.contains('removable')) {
         target.classList.remove('removable');
         target.classList.add('removable-undo');
-        target.dataset.position = target.style.position;
         target.style.position = 'absolute';
         target.style.maxHeight = '15px';
+        target.style.opacity = 0;
+        document.getElementById('remove-class__icon').innerHTML = "undo"
+
+      } else if (target.classList.contains('removable-undo')) {
+        target.classList.remove('removable-undo');
+        target.classList.add('removable');
+        target.style.position = 'static';
+        target.style.maxHeight = '';
+        target.style.opacity = 1;
+        document.getElementById('remove-class__icon').innerHTML = "close"
+
+      } else if (target.classList.contains('clearable-undo')) {
+        target.innerHTML = target.querySelector('.clearable-undo-absolute-position').innerHTML;
+        target.classList.remove('clearable-undo');
+        target.classList.add('clearable');
+        target.style.opacity = 1;
+        document.getElementById('remove-class__icon').innerHTML = "close"
       }
     }
   }
+
+
+  /***********
+   * Editors *
+   ***********/
+
+   openLinkEditor = event => {
+     event.preventDefault();
+     this.props.EmailBuilder.openLinkEditor(event.target)
+   }
 
   render() {
       return (
@@ -296,17 +372,18 @@ class Block extends Component {
             {this.exitIcon()}
 
             {this.moveIcon()}
-            
-            {this.duplicateIcon()}
 
             {this.blockLine()}
+
+            {this.moveTopIcon()}
+            
+            {this.moveBottomIcon()}
 
             <div
             ref={(input) => { this.self = input; }}
             className="unwrap"
             dangerouslySetInnerHTML={{__html: this.state.html.outerHTML}}
             />
-            {/* <div className="unwrap" onClick={this.edit} dangerouslySetInnerHTML={{__html: this.state.html.outerHTML}}/> */}
             
           </div>
       )
