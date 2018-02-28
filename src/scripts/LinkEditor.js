@@ -40,9 +40,9 @@ class LinkEditor extends Component {
     render() {
         if (this.state.target) {
             return (
-                <div id="link-editor" className="destroy">
-                    <div id="link-editor-box">
-                        <div id="link-editor__text">
+                <div id="editor__link" className="editor destroy">
+                    <div className="editor__box">
+                        <div className="input-container__text-line">
                             <label htmlFor="text">Text:</label>
                             <input
                             type="text"
@@ -53,7 +53,7 @@ class LinkEditor extends Component {
                             />
                         </div>
                         
-                        <div id="link-editor__url">
+                        <div className="input-container__text-line">
                             <label htmlFor="url">Link URL:</label>
                             <input
                             type="url"
@@ -64,13 +64,13 @@ class LinkEditor extends Component {
                             />
                         </div>
     
-                        <div className="link-editor-preview">
+                        <div id="editor__link__preview">
                             <a ref={input => this.previewLink = input} href={this.state.url}>{this.state.text}</a>
                         </div>
     
-                        <div className="link-editor__buttons">
-                            <button className="link-editor__buttons--gray" onClick={this.close}>Cancel</button>
-                            <button className="link-editor__buttons--blue" onClick={this.updateLink}>Done</button>
+                        <div className="editor__buttons-row">
+                            <button className="button background--gray" onClick={this.close}>Cancel</button>
+                            <button className="button background--blue text--white" onClick={this.updateLink}>Done</button>
                         </div>
                     </div>
                 </div>

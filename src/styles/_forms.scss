@@ -1,0 +1,109 @@
+#import-input {
+    border: solid 2px #ffffff;
+    display: flex;
+    position: relative;
+    opacity: 1;
+    transition: all .25s ease;
+
+    &:hover {
+        opacity: .75
+    }
+
+    &__button {
+        background-color: #ffffff;
+        color: $blue;
+        padding: 10px 15px;
+        font-weight: bold;
+    }
+
+    &__file-name {
+        padding: 10px;
+    }
+
+    &__input {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        opacity: 0;
+        cursor: pointer;
+    }
+}
+
+.button {
+    position: relative;
+    transition: all .25s ease;
+    margin: 20px;
+    flex-grow: 1;
+    text-align: center;
+    padding: 15px 10px;
+    cursor: pointer;
+    font-size: 13px;
+    letter-spacing: .05em;
+    width: 100%;
+    max-width: 250px;
+    border: 0;
+    border-radius: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+
+    &:hover {
+        opacity: .75;
+    }
+
+    & input[type=file] {
+        opacity: 0;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        cursor: pointer;
+    }
+}
+
+.input-container {
+    &__text-line {
+        width: 100%;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        margin-bottom: 20px;
+
+        &:last-of-type {
+            margin-bottom: 0;
+        }
+
+        label {
+            padding-right: 10px;
+            font-weight: bold;
+            color: $blue;
+            font-size: 13px;
+        }
+
+        input {
+            flex-grow: 1;
+            border: 0;
+            border-bottom: solid 1px $gray;
+            font-size: 11px;
+            padding: 5px;
+        }
+
+        button {
+            align-items: center;
+            font-size: 10px;
+            margin-left: 10px;
+            border: 0;
+            background-color: $gray;
+            padding: 5px 7.5px;
+            letter-spacing: .05em;
+            transition: all .25s ease;
+            cursor: pointer;
+
+            &:hover {
+                background-color: #808080;
+            }
+        }
+    }
+}

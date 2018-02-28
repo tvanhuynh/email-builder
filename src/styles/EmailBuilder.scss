@@ -1,0 +1,34 @@
+// VARIABLES
+
+$blue: #005288;
+$lightblue: #96c0e6;
+$orange: #e8941a;
+$red: #ff0000;
+$gray: #e5e5e5;
+
+// IMPORTS
+@import 'structural';
+@import 'properties';
+@import 'forms';
+@import 'remove-clear';
+@import 'medium-editor';
+
+// DEFAULTS
+
+:root {
+    --blue: #005288;
+    --lightblue: #96c0e6;
+    --orange: #e8941a;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+*:focus {
+    outline: none;
+}
+
+.unwrap, .repeatable {
+    transition: all .25s ease;
+}

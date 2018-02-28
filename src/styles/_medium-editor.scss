@@ -1,0 +1,25 @@
+.medium-editor-toolbar {
+    background-color: $blue;
+}
+
+.medium-toolbar-arrow-under:after {
+    border-color: $blue transparent transparent;
+}
+
+.medium-editor-toolbar li button {
+    border-right-color: $lightblue;
+    border-radius: 0;
+}
+
+.medium-editor-toolbar li button:hover {
+    background-color: $lightblue;
+    border-radius: 0;
+}
+
+.medium-editor-toolbar-form .medium-editor-toolbar-input {
+    background-color: $blue;
+}
+
+.medium-editor-toolbar li .medium-editor-button-active {
+    background-color: $lightblue;
+}

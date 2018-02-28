@@ -3,6 +3,7 @@ import Block from './Block';
 import TemplateBlock from './TemplateBlock';
 import ImageEditor from './ImageEditor';
 import LinkEditor from './LinkEditor';
+import DownloadBox from './DownloadBox';
 import '../styles/EmailBuilder.css';
 var MediumEditor = require('medium-editor');
 var rangy = require('rangy');
@@ -24,7 +25,7 @@ class EmailBuilder extends Component {
   }
 
   componentDidUpdate() {
-    console.log(this.state);
+    // console.log(this.state);
   }
 
 
@@ -316,15 +317,15 @@ class EmailBuilder extends Component {
     if (this.state.blocks.length === 0) {
       return (
         <div>
-          <div id="import-email">
-            <h2 id="import-email__button">Import an old email.</h2>
-            <input id="import-email__input" type="file" accept=".html" onChange={this.readEmailImport} />
+          <div className="button background--orange text--white">
+            Import an old email.
+            <input type="file" accept=".html" onChange={this.readEmailImport} />
           </div>
           {/* Check if there's a template to start new email from. */}
           {(() => {if (this.state.templateBlocks.length > 0){ return (
-              <div id="start-new-email" onClick={this.resetEmail}>
+              <button className="button background--blue text--white" onClick={this.resetEmail}>
                 Start a new email.
-              </div>
+              </button>
           ) }})()}
 
         </div>
@@ -363,6 +364,17 @@ class EmailBuilder extends Component {
     this.linkEditor.udpateTarget(target);
   }
 
+
+  /**
+   * Open Image Editor
+   * @param {object} target - the target area that will be edited
+   * @returns {null}
+   */
+  openImageEditor = target => {
+    this.imageEditor.updateTarget(target)
+  }
+
+
   render() {
 
     if (this.state.hasInitiated) {
@@ -384,22 +396,23 @@ class EmailBuilder extends Component {
             <span id="remove-class__icon">close</span>
           </figure>
 
-          <div id="template-blocks" className="destroy template-blocks--visible destroy" ref={input => {this.templateBlocks = input}}>
+          <div id="template-blocks" className="destroy template-blocks--visible" ref={input => {this.templateBlocks = input}}>
             <div id="template-blocks__toggle" className="template-blocks__toggle--visible" onClick={this.toggleTemplateBlocks}>
                 Template Blocks
             </div>
             <ul>
               {this.state.templateBlocks.length ? this.state.templateBlocks : (
-                <li id="import-template">
-                  <h2 className="template-block__title template-block__title--white">Import Template Blocks</h2>
-                  <input id="import-template__input" type="file" accept=".html" onChange={this.readEmailImport} />
+                <li className="button background--orange text--white">
+                  Import Template Blocks
+                  <input type="file" accept=".html" onChange={this.readEmailImport} />
                 </li>
               )}
             </ul>
           </div>
 
-          <ImageEditor bank={this.imageBank} />
+          <ImageEditor ref={input => {this.imageEditor = input}} bank={this.imageBank} />
           <LinkEditor ref={input => {this.linkEditor = input}}/>
+          <DownloadBox />
         </div>
       )
     } else {

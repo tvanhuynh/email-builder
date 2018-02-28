@@ -17,9 +17,9 @@ class TemplateBlock extends Component {
             onDragEnd={this.tempalteEndDrag}
             title="Drag and drop this tile to add to the email."
             >
-            <h2 className="template-block__title">{this.props.HTML.dataset.name}</h2>
-            <img className="template-block__image" src={this.props.HTML.dataset.image} alt="" draggable="false"/>
-            <div className="template-block__description">{this.props.HTML.dataset.description}</div>
+            <h2 className="template-blocks__block__title">{this.props.HTML.dataset.name}</h2>
+            <img className="template-blocks__block__image" src={this.props.HTML.dataset.image} alt="" draggable="false"/>
+            <div className="template-blocks__block__description">{this.props.HTML.dataset.description}</div>
         </li>
       )
   }

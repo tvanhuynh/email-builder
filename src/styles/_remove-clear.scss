@@ -1,0 +1,73 @@
+.removable, .clearable, .removable-undo, .clearable-undo {
+    transition: all .25s ease;
+}
+
+.removable-undo, .clearable-undo {
+    overflow: hidden;
+}
+
+#remove-class {
+    position: absolute;
+    margin: 0;
+    transition: opacity .25s ease;
+    opacity: 0;
+    cursor: pointer;
+
+    &:hover {
+        opacity: 1 !important;
+    }
+
+    &__delete-icon, &__undo-icon, &__add-icon, &__up-icon, &__down-icon {
+        font-family: 'Material Icons';
+        color: #ffffff;
+        font-size: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: $blue;
+        height: 25px;
+        width: 25px;
+        position: absolute;
+        top: 0;
+        right: 0;
+        transition: all .25s ease;
+
+        &:hover {
+            background-color: $orange;
+        }
+    }
+
+    &__add-icon {
+        right: -30px;
+    }
+
+    &__up-icon {
+        right: -60px;
+    }
+
+    &__down-icon {
+        right: -90px;
+    }
+
+    &__delete-icon:hover {
+        background-color: red;
+    }
+}
+
+.clearable-undo-absolute-position {
+    position: absolute;
+    overflow: hidden;
+    height: 15px;
+    transition: all .25s ease;
+}
+
+a.editable:hover::after {
+    content: " edit link";
+    color: #808080;
+    font-style: oblique;
+    font-size: 10px;
+}
+
+img.editable, img.editable-fixed {
+    cursor: pointer;
+}
