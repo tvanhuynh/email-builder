@@ -1,8 +1,8 @@
-##About
+## About
 
 Email Builder is a single-paged web application that allows its users to create and edit emails from pre-made templates. Email Builder allow companies with a small email developer staff to efficiently work and connect the bridge between developer and marketer. This allows developers to simply create custom templates, which can be used by anyone with access to the file to build an email. To use a template on Email Builder, no coding experience is necessary, allowing anyone to easily create an email. No sign up or log in necessary. Email Builder allows full privacy of information, as all files are locally stored by the user and are never actually uploaded to a server.
 
-##Docs
+## Docs
 
 - **How to Create a Template**
   - To start off, create a table element in the body of your email template file, with a total of 1 column and 1 row. It will automatically have a width attribute of 100%, however it is recommended that you add this in while building your template for your own viewing purposes. Any style attributes will be read by the Email Builder. The table’s td element, will also automatically have an align attribute of center. It is also recommended to include this in your template for your own viewing purposes.
