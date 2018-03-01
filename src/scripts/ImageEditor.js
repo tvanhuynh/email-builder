@@ -16,7 +16,9 @@ class ImageEditor extends Component {
         super(props);
 
         this.bank = document.createElement('ul');
-        this.bank.innerHTML = this.props.bank;
+        if (this.props.bank) {
+            this.bank.innerHTML = this.props.bank;
+        }
     }
 
     componentDidUpdate() {
@@ -35,6 +37,12 @@ class ImageEditor extends Component {
                     };
                 }
             })
+
+            if (!document.getElementById('editor__image__settings__bank').hasChildNodes()) {
+                document.getElementById('editor__image__settings__bank').style.opacity = 0;
+            } else {
+                document.getElementById('editor__image__settings__bank').style.opacity = 1;
+            }
             this.calculateWidth();
         }
     }
@@ -156,6 +164,7 @@ class ImageEditor extends Component {
                             </div>
                             <ul
                             id="editor__image__settings__bank"
+                            // ref={input => this.bankRef = input}
                             dangerouslySetInnerHTML={{__html: this.bank.innerHTML}}
                             />
                             <div className="editor__buttons-row">

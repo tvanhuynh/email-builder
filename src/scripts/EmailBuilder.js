@@ -47,18 +47,6 @@ class EmailBuilder extends Component {
 
       isTemplate = file.target.result.includes("</body>") ? false : true;
       if (isTemplate) {
-        const headerBlocks = [...importedHTML.getElementsByClassName('header-block')];
-        this.headerBlocks = headerBlocks.map(i => {
-          this.blocksKey++;
-          return (<Block EmailBuilder={this} key={this.blocksKey} HTML={i} />);
-        });
-        
-        const footerBlocks = [...importedHTML.getElementsByClassName('footer-block')];
-        this.footerBlocks = footerBlocks.map(i => {
-          this.blocksKey++;
-          return (<Block EmailBuilder={this} key={this.blocksKey} HTML={i} />);
-        });
-        
         const allBlocks = [...importedHTML.getElementsByClassName('block')];
         let templateBlocks = allBlocks.filter(i => i.dataset.name);
         
@@ -73,21 +61,34 @@ class EmailBuilder extends Component {
         this.colorsExtension = this.getColors(colors);
 
         this.imageBank = importedHTML.querySelector('#image-bank').innerHTML;
-      }
-    }
-
-    reader.onloadend = file => {
-      if (!isTemplate) {
+      } else {
         let blocks = [...importedHTML.getElementsByClassName('block')];
         blocks = blocks.map(i => {
           this.blocksKey++;
           return <Block EmailBuilder={this} key={this.blocksKey} HTML={i} />
         })
+
         this.setState({blocks: blocks});
-      } else {
-        let style = [...importedHTML.getElementsByTagName('style')];
-        style.forEach(i => document.getElementsByTagName('head')[0].appendChild(i));
       }
+
+      if(!this.state.hasInitiated) {
+        const headerBlocks = [...importedHTML.getElementsByClassName('header-block')];
+        this.headerBlocks = headerBlocks.map(i => {
+          this.blocksKey++;
+          return (<Block EmailBuilder={this} key={this.blocksKey} HTML={i} />);
+        });
+        
+        const footerBlocks = [...importedHTML.getElementsByClassName('footer-block')];
+        this.footerBlocks = footerBlocks.map(i => {
+          this.blocksKey++;
+          return (<Block EmailBuilder={this} key={this.blocksKey} HTML={i} />);
+        });
+
+        importedHTML.querySelectorAll('style').forEach(i => document.head.appendChild(i));
+      }
+    }
+
+    reader.onloadend = file => {
 
       this.setState({hasInitiated: true});
 
@@ -300,7 +301,7 @@ class EmailBuilder extends Component {
    * @returns {null}
    */
   download = () => {
-    //to do
+    this.downloadBox.makeVisible();
   }
  
 
@@ -412,7 +413,7 @@ class EmailBuilder extends Component {
 
           <ImageEditor ref={input => {this.imageEditor = input}} bank={this.imageBank} />
           <LinkEditor ref={input => {this.linkEditor = input}}/>
-          <DownloadBox />
+          <DownloadBox ref={input => {this.downloadBox = input}}/>
         </div>
       )
     } else {
