@@ -10,6 +10,7 @@ class ImageEditor extends Component {
         width: 0,
         url: '',
         alt: '',
+        isFixedWidth: false,
     }
 
     constructor(props) {
@@ -29,7 +30,13 @@ class ImageEditor extends Component {
                     i.style.backgroundImage = `url('${src}')`;
                     i.onclick = () => {
                         this.setState({src: src});
-                        if (!this.state.isFixed) {
+                        if (this.state.isFixedWidth) {
+                            let img = new Image();
+                            img.src = src;
+                            let ratio = img.height / img.width;
+                            this.setState({height: this.state.width * ratio});
+                            console.log('fixed width');
+                        } else if (!this.state.isFixed) {
                             let img = new Image();
                             img.src = src;
                             this.setState({height: img.height, width: img.width});
@@ -50,7 +57,13 @@ class ImageEditor extends Component {
     handleChange = event => {
         if (event.target.id === 'editor__image__settings__input__src') {
             this.setState({src: event.target.value});
-            if (!this.state.isFixed) {
+            if (this.state.isFixedWidth) {
+                let img = new Image();
+                img.src = event.target.value;
+                let ratio = img.height / img.width;
+                this.setState({height: this.state.width * ratio});
+                console.log('fixed width');
+            } else if (!this.state.isFixed) {
                 let img = new Image();
                 img.src = event.target.value;
                 this.setState({height: img.height, width: img.width});
@@ -71,6 +84,7 @@ class ImageEditor extends Component {
             width: target.width,
             alt: target.getAttribute('alt') || '',
             url: target.parentNode.getAttribute('href') || '',
+            isFixedWidth: target.classList.contains('fixed-width'),
         });
     }
 
@@ -103,16 +117,18 @@ class ImageEditor extends Component {
 
     calculateWidth = () => {
         let width = document.getElementById('editor__image__preview').offsetWidth - 40 - 2;
+        let height = document.getElementById('editor__image__preview').offsetHeight - 40 - 2;
         let ratio = this.state.height / this.state.width;
         let previewImage = document.getElementById('editor__image__preview__image');
 
-        if (this.state.isFixed) {
+        if (this.state.width > this.state.height) {
             previewImage.style.width = this.state.width > width ? width + 'px' : this.state.width + 'px';
             previewImage.style.height = this.state.width > width ? ratio * width + 'px' : this.state.height + 'px';
         } else {
-            previewImage.style.width = this.state.width > width ? width + 'px' : this.state.width + 'px';
-            previewImage.style.height = this.state.width > width ? ratio * width + 'px' : this.state.height + 'px';
+            previewImage.style.width = this.state.height > height ? 1 / ratio * height + 'px' : this.state.width + 'px';
+            previewImage.style.height = this.state.height > height ? height + 'px' : this.state.height + 'px';
         }
+
     }
 
     render() {

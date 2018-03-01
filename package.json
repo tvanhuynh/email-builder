@@ -2,7 +2,9 @@
   "name": "email-builder",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://tvanhuynh.github.io/email-builder",
   "dependencies": {
+    "gh-pages": "^1.1.0",
     "medium-editor": "^5.23.3",
     "node-sass-chokidar": "0.0.3",
     "normalize.css": "^8.0.0",
@@ -13,6 +15,8 @@
     "react-scripts": "1.1.1"
   },
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "build-css": "node-sass-chokidar src/ -o src/",
     "watch-css": "npm run build-css && node-sass-chokidar src/ -o src/ --watch --recursive",
     "start-js": "react-scripts start",

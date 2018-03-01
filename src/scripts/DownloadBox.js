@@ -7,13 +7,17 @@ class DownloadBox extends Component {
     }
 
     componentDidUpdate() {
+        if (this.codeToCopy) this.codeToCopy.value = "<!DOCTYPE html>\n" + this.documentCloneFinished.documentElement.outerHTML;
+    }
+
+    createFiles = () => {
         this.documentClone = document.cloneNode(true);
 
-        // remove styles
-        let styles = this.documentClone.querySelectorAll('style');
-        for (let i = 0; i < 5; i++) {
-            styles[i].remove();
-        }
+        this.documentClone.querySelectorAll('style').forEach(i => {
+            if (!i.classList.contains('user-style')) {
+                i.remove();
+            }
+        })
 
         // remove medium editors
         this.documentClone.querySelectorAll('.medium-editor-anchor-preview').forEach(i => i.remove());
@@ -43,6 +47,9 @@ class DownloadBox extends Component {
             i.remove();
         });
 
+        // remove titles
+        this.documentClone.querySelectorAll('img').forEach(i => i.setAttribute('title', ''));
+
         this.documentCloneFinished = this.documentClone.cloneNode(true);
 
         // remove classes
@@ -52,21 +59,28 @@ class DownloadBox extends Component {
         this.documentCloneFinished.querySelectorAll('.mandatory').forEach(i => i.classList.remove('mandatory'));
         this.documentCloneFinished.querySelectorAll('.editable').forEach(i => i.classList.remove('editable'));
         this.documentCloneFinished.querySelectorAll('.editable-fixed').forEach(i => i.classList.remove('editable-fixed'));
+        this.documentCloneFinished.querySelectorAll('.fixed-width').forEach(i => i.classList.remove('fixed-width'));
         this.documentCloneFinished.querySelectorAll('.clearable').forEach(i => i.classList.remove('clearable'));
         this.documentCloneFinished.querySelectorAll('.removable').forEach(i => i.classList.remove('removable'));
         this.documentCloneFinished.querySelectorAll('.repeatable').forEach(i => i.classList.remove('repeatable'));
-        this.documentCloneFinished.querySelectorAll('.clearable-undo').forEach(i => i.remove());
+        this.documentCloneFinished.querySelectorAll('.user-style').forEach(i => i.classList.remove('user-style'));
+
+        // delete cleared/removables
+        this.documentCloneFinished.querySelectorAll('.clearable-undo').forEach(i => {
+            while(i.firstChild) {
+                i.firstChild.remove();
+            }
+            i.classList.remove('clearable-undo');
+        });
         this.documentCloneFinished.querySelectorAll('.removable-undo').forEach(i => i.remove());
-
-
-        if (this.codeToCopy) this.codeToCopy.value = "<!DOCTYPE html>\n" + this.documentCloneFinished.documentElement.outerHTML;
     }
 
     makeVisible = () => {
+        this.createFiles();
         this.setState({download: true});
     }
 
-    download = (filename, text) => {
+    downloadSetUp = (filename, text) => {
         var pom = document.createElement('a');
         pom.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
         pom.setAttribute('download', filename);
@@ -81,8 +95,8 @@ class DownloadBox extends Component {
         }
     }
 
-    test = () => {
-        this.download('New-Email-File.html', "<!DOCTYPE html>\n" + this.documentClone.documentElement.outerHTML);
+    downloadFile = () => {
+        this.downloadSetUp('New-Email-File.html', "<!DOCTYPE html>\n" + this.documentClone.documentElement.outerHTML);
     }
 
     render() {
@@ -102,7 +116,7 @@ class DownloadBox extends Component {
                             <button
                             className="button background--orange text--white"
                             id="download-box__button"
-                            onClick={this.test}
+                            onClick={this.downloadFile}
                             >
                                 Download Locally
                             </button>

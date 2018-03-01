@@ -56,11 +56,14 @@ class EmailBuilder extends Component {
         this.defaultHTML = allBlocks;
 
         let colors = importedHTML.querySelector('#colors');
-        colors = [...colors.getElementsByTagName('li')];
-        colors = colors.map(i => i.innerHTML);
-        this.colorsExtension = this.getColors(colors);
+        if (colors) {
+          colors = [...colors.getElementsByTagName('li')];
+          colors = colors.map(i => i.innerHTML);
+          this.colorsExtension = this.getColors(colors);
+        }
 
-        this.imageBank = importedHTML.querySelector('#image-bank').innerHTML;
+        this.imageBank = importedHTML.querySelector('#image-bank');
+        if (this.imageBank) this.imageBank = this.imageBank.innerHTML;
       } else {
         let blocks = [...importedHTML.getElementsByClassName('block')];
         blocks = blocks.map(i => {
@@ -84,7 +87,10 @@ class EmailBuilder extends Component {
           return (<Block EmailBuilder={this} key={this.blocksKey} HTML={i} />);
         });
 
-        importedHTML.querySelectorAll('style').forEach(i => document.head.appendChild(i));
+        importedHTML.querySelectorAll('style').forEach(i => {
+          i.classList.add('user-style');
+          document.head.appendChild(i)
+        });
       }
     }
 
@@ -388,10 +394,16 @@ class EmailBuilder extends Component {
 
           </td></tr></tbody></table>
 
-          <figure id="download" className="destroy" onClick={this.download}>
-            <span id="download__icon">get_app</span>
-            <figcaption id="download__caption">Download</figcaption>
-          </figure>
+          {(() => {
+            if (this.state.blocks.length > 0) {
+              return (
+                <figure id="download" className="destroy" onClick={this.download}>
+                  <span id="download__icon">get_app</span>
+                  <figcaption id="download__caption">Download</figcaption>
+                </figure>
+              );
+            }
+          })()}
 
           <figure id="remove-class" className="destroy">
             <span id="remove-class__icon">close</span>
@@ -403,7 +415,7 @@ class EmailBuilder extends Component {
             </div>
             <ul>
               {this.state.templateBlocks.length ? this.state.templateBlocks : (
-                <li className="button background--orange text--white">
+                <li className="button background--orange text--white" id="import-template-blocks-button">
                   Import Template Blocks
                   <input type="file" accept=".html" onChange={this.readEmailImport} />
                 </li>
@@ -418,14 +430,102 @@ class EmailBuilder extends Component {
       )
     } else {
         return (
-          <div id="import-form" className="whole-page-flex background--blue">
-            <div>
-              <h1>Please import an email or template file.</h1>
-              <div id="import-input">
-                <div id="import-input__button">Choose File</div>
-                <div id="import-input__file-name">No file selected.</div>
-                <input id="import-input__input" type="file" accept=".html" onChange={this.readEmailImport}/>
+          <div>
+            <nav id="home-navigation">
+              <ul>
+                <li id="home-navigation__title"><a href="/">Email Builder</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#docs">Docs</a></li>
+                <li><a href="#">Demo</a></li>
+              </ul>
+            </nav>
+            <div id="import-form" className="whole-page-flex background--blue">
+              <div>
+                <h1>Please import an email or template file.</h1>
+                <div id="import-input">
+                  <div id="import-input__button">Choose File</div>
+                  <div id="import-input__file-name">No file selected.</div>
+                  <input id="import-input__input" type="file" accept=".html" onChange={this.readEmailImport}/>
+                </div>
               </div>
+            </div>
+            <div id="about" class="text-block">
+              <h1>About</h1>
+              <p>Email Builder is a single-paged web application that allows its users to create and edit emails from pre-made templates. Email Builder allow companies with a small email developer staff to efficiently work and connect the bridge between developer and marketer. This allows developers to simply create custom templates, which can be used by anyone with access to the file to build an email. To use a template on Email Builder, no coding experience is necessary, allowing anyone to easily create an email. No sign up or log in necessary. Email Builder allows full privacy of information, as all files are locally stored by the user and are never actually uploaded to a server.</p>
+            </div>
+            <div id="docs" class="text-block text-block--blue">
+              <h1>Docs</h1>
+              <h2>How to Create a Template</h2>
+
+              <p>To start off, create a <span class="html-element-text">table</span> element in the body of your email template file, with a total of 1 column and 1 row. It will automatically have a width attribute of 100%, however it is recommended that you add this in while building your template for your own viewing purposes. Any style attributes will be read by the Email Builder. The table’s <span class="html-element-text">td</span> element, will also automatically have an align attribute of center. It is also recommended to include this in your template for your own viewing purposes.</p>
+
+              <p>Inside the table you just created add another table and give it a class “block.” Create it as you see fit and the Email Builder will parse this element and its children as a template block. The user will be able to add, remove, and reorder these template blocks inside the email. Create as many template blocks as you see fit. There are three types of blocks: header block, footer block, and block. Please see the class guide for more information on these block types.</p>
+              
+              <p>Optionally, after the closing tag of the first table you created, you can create a list of HEX colors to utilize in the template’s Medium Editors. This list will only accept a single level, DO NOT nest list items.</p>
+
+              <p>An additional option, after the closing tag of the first table you created, you can create a list of image URLs to utilize in the template’s image editor. These images will appear in a list format for the user to select from. This list will only accept a two-level nested unordered list. The first level should be grouping titles and the second level should be the direct URLs to the photos.</p>
+
+              <p>All style tags will be imported from the email template file.</p>
+
+              <br /><br />
+
+              <h2>Template Classes</h2>
+              <h3>block </h3>
+              <p class="class-definition">
+                &mdash; Adding the class “block” to an HTML element will make the email builder parse it as template block.
+              </p>
+
+              <h3>header block </h3>
+              <p class="class-definition">
+                &mdash; Adding the class “header-block” to an HTML element will make the email builder parse sit as a header block. Header blocks sit at the beginning of the document, in the same order that they are created in the template file. They are not considered template blocks and will not appear in the template block sidebar. Additionally, header blocks are not able to be deleted and cannot be moved around or reordered.
+              </p>
+
+              <h3>footer block </h3>
+              <p class="class-definition">
+                &mdash; Adding the class “footer-block” to an HTML element will make the email builder parse sit as a footer block. Footer blocks sit at the end of the document, in the same order that they are created in the template file. They are not considered template blocks and will not appear in the template block sidebar. Additionally, footer blocks are not able to be deleted and cannot be moved around or reordered.
+              </p>
+
+              <h3>editable </h3>
+              <p class="class-definition">
+                &mdash; Adding the class “editable” to an HTML element will make the element editable, according to the element type:
+                <ul>
+                  <li><span class="html-element-text">a</span> tags will open the link editor, allowing the user to edit the text of the hyperlink and the link to which it leads.</li>
+                  <li><span class="html-element-text">img</span> tags will open the image editor, allowing the user to edit the image, alt-text, and link to which the image leads.</li>
+                  <li>Container tags, like <span class="html-element-text">span</span> and <span class="html-element-text">td</span> will create a Medium Editor, allowing the user to edit the text directly on the page, with a toolbar of bold, italics, underlink, anchor, and colors set by the user.</li>
+                </ul>
+              </p>
+
+              <h3>editable-fixed </h3>
+              <p class="class-definition">
+                &mdash; Adding the class “editable-fixed” to an HTML element will make the element editable with fixed variables, according to the element type:
+                <ul>
+                  <li><span class="html-element-text">a</span> tags will open the link editor, allowing the user to edit the text of the hyperlink and the link to which it leads. This will be no different than an <span class="html-element-text">a</span> tag with the class “editable.”</li>
+                  <li><span class="html-element-text">img</span> tags will open the image editor, allowing the user to edit the image, alt-text, and link to which the image leads. The image will, however, retain the height and width attributes set in the template file.</li>
+                  <li>Container tags, like <span class="html-element-text">span</span> and <span class="html-element-text">td</span> will create a Medium Editor, allowing the user to edit the text directly on the page, WITHOUT a toolbar. All styling defined in the template will remain.</li>
+                </ul>
+              </p>
+
+            <h3>fixed-width </h3>
+            <p class="class-definition">
+              &mdash; Adding the class “fixed-width” to an <span class="html-element-text">img</span> element will force whatever image selected to be constrained to the width attribute specified in the template.
+            </p>
+
+            <h3>clearable </h3>
+            <p class="class-definition">
+              &mdash; Adding the class “clearable” to an HTML element will allow the user to clear all contents of that element. This is useful for when deleting the entire element will affect the template (e.g. removing a <span class="html-element-text">td</span> as opposed to making it empty, for a multi-column layout). The user does have the option to place it back if they choose.
+            </p>
+
+            <h3>removable </h3>
+            <p class="class-definition">
+              &mdash; Adding the class “removable” to an HTML element will allow the user to remove the element entirely from the email. The user does have the option to place it back if they choose.
+            </p>
+
+            <h3>repeatable </h3>
+            <p class="class-definition">
+              &mdash; Adding the class “repeatable” to an HTML element will allow the user to duplicate the element, reorder the element with its neighboring “repeatable” class elements, and delete the elements, as they see fit. 
+            </p>
+
+
             </div>
           </div>
         )

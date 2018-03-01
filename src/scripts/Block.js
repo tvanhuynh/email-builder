@@ -5,7 +5,6 @@ class Block extends Component {
   state = {
     html: this.props.HTML,
     moveIconSelected: false,
-    mandatory: this.props.HTML,
   }
 
   constructor(props) {
@@ -17,7 +16,7 @@ class Block extends Component {
 
     // find out properties of block
     let temp = [...this.props.HTML.classList];
-    this.mandatory = temp.includes("mandatory") || temp.includes("header-block") || temp.includes("footer-block");
+    this.mandatory = temp.includes("header-block") || temp.includes("footer-block");
     this.fixed = temp.includes("header-block") || temp.includes("footer-block");
     
     // remove dragging from images and anchor links
@@ -249,8 +248,8 @@ class Block extends Component {
     } else if (target.classList.contains('repeatable')) {
       this.clearFloatingIcons();
       this.floatingIcons.appendChild(this.addIcon);
+      this.floatingIcons.appendChild(this.deleteIcon);
       if(target.parentNode.getElementsByClassName('repeatable').length > 1) {
-        this.floatingIcons.appendChild(this.deleteIcon);
         this.floatingIcons.appendChild(this.upIcon);
         this.floatingIcons.appendChild(this.downIcon);
       }

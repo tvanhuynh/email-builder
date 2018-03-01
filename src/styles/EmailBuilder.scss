@@ -32,3 +32,7 @@ $gray: #e5e5e5;
 .unwrap, .repeatable {
     transition: all .25s ease;
 }
+
+body {
+    overflow-x: hidden;
+}
