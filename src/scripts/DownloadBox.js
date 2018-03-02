@@ -114,7 +114,7 @@ class DownloadBox extends Component {
                                 Close
                             </button>
                             <button
-                            className="button background--orange text--white"
+                            className="button background--highlight text--white"
                             id="download-box__button"
                             onClick={this.downloadFile}
                             >

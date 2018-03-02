@@ -1,9 +1,9 @@
 .medium-editor-toolbar {
-    background-color: $blue;
+    background-color: $main-color;
 }
 
 .medium-toolbar-arrow-under:after {
-    border-color: $blue transparent transparent;
+    border-color: $main-color transparent transparent;
 }
 
 .medium-editor-toolbar li button {
@@ -17,7 +17,7 @@
 }
 
 .medium-editor-toolbar-form .medium-editor-toolbar-input {
-    background-color: $blue;
+    background-color: $main-color;
 }
 
 .medium-editor-toolbar li .medium-editor-button-active {

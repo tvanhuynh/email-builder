@@ -153,9 +153,9 @@ class ImageEditor extends Component {
                                     placeholder="Enter the URL of the image you wish to display."
                                     onChange={this.handleChange}
                                     />
-                                    <button id="editor__image__src__image-database-button">
+                                    {/* <button id="editor__image__src__image-database-button">
                                         Browse
-                                    </button>
+                                    </button> */}
                                 </div>
                                 <div className="input-container__text-line">
                                     <label htmlFor="editor__image__settings__input__alt">Alt Text:</label>
@@ -191,7 +191,7 @@ class ImageEditor extends Component {
                                     Cancel
                                 </button>
                                 <button
-                                className="button background--blue text--white"
+                                className="button background--highlight text--white"
                                 onClick={this.updateImage}
                                 >
                                     Done

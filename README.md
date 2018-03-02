@@ -1,6 +1,6 @@
 ## About
 
-Email Builder is a single-paged web application that allows its users to create and edit emails from pre-made templates. Email Builder allow companies with a small email developer staff to efficiently work and connect the bridge between developer and marketer. This allows developers to simply create custom templates, which can be used by anyone with access to the file to build an email. To use a template on Email Builder, no coding experience is necessary, allowing anyone to easily create an email. No sign up or log in necessary. Email Builder allows full privacy of information, as all files are locally stored by the user and are never actually uploaded to a server.
+Email Builder is a single-paged web application that allows its users to create and edit emails from pre-made templates. It builds a bridge in communication between developer and marketer, making the email creation process more efficient and less frustrating. This app allows developers to create custom templates that can be used by anyone with local access to the file. No coding experience is necessary to use these templates in Email Builder. Anyone can easily go from template to final email. No sign up or log in necessary. Email Builder allows full privacy of information, as all files are locally stored by the user and are never actually uploaded anywhere.
 
 ## Docs
 

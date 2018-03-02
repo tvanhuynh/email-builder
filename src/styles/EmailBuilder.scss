@@ -1,8 +1,8 @@
 // VARIABLES
 
-$blue: #005288;
-$lightblue: #96c0e6;
-$orange: #e8941a;
+$main-color: #67809F;
+$lightblue: #34495E;
+$highlight: #00B16A;
 $red: #ff0000;
 $gray: #e5e5e5;
 
@@ -14,12 +14,6 @@ $gray: #e5e5e5;
 @import 'medium-editor';
 
 // DEFAULTS
-
-:root {
-    --blue: #005288;
-    --lightblue: #96c0e6;
-    --orange: #e8941a;
-}
 
 * {
     box-sizing: border-box;

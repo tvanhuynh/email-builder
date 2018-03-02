@@ -1,9 +1,9 @@
 .background--blue {
-    background-color: $blue;
+    background-color: $main-color;
 }
 
-.background--orange {
-    background-color: $orange;
+.background--highlight {
+    background-color: $highlight;
 }
 
 .background--gray, .background--grey {
@@ -12,4 +12,12 @@
 
 .text--white {
     color: #ffffff;
+}
+
+.text--main {
+    color: $main-color !important;
+}
+
+.text--highlight {
+    color: $highlight !important;
 }

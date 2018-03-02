@@ -70,7 +70,7 @@ class LinkEditor extends Component {
     
                         <div className="editor__buttons-row">
                             <button className="button background--gray" onClick={this.close}>Cancel</button>
-                            <button className="button background--blue text--white" onClick={this.updateLink}>Done</button>
+                            <button className="button background--highlight text--white" onClick={this.updateLink}>Done</button>
                         </div>
                     </div>
                 </div>
