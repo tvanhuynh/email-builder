@@ -505,10 +505,10 @@ class EmailBuilder extends Component {
             <span id="remove-class__icon">close</span>
           </figure>
 
+          <div id="template-blocks__toggle" className="template-blocks__toggle--visible" onClick={this.toggleTemplateBlocks}>
+              Template Blocks
+          </div>
           <div id="template-blocks" className="destroy template-blocks--visible" ref={input => {this.templateBlocks = input}}>
-            <div id="template-blocks__toggle" className="template-blocks__toggle--visible" onClick={this.toggleTemplateBlocks}>
-                Template Blocks
-            </div>
             <ul>
               {this.state.templateBlocks.length ? this.state.templateBlocks : (
                 <li className="button background--highlight text--white" id="import-template-blocks-button">
