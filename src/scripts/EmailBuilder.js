@@ -529,7 +529,8 @@ class EmailBuilder extends Component {
           <div>
             <nav id="home-navigation">
               <ul>
-                <li id="home-navigation__title"><a href="/">Email Builder</a></li>
+                <li id="home-navigation__title"><a href="/"><span className="material-icon" id="logo-icon">drafts</span> Email Builder</a></li>
+                <li><a href="#import-form">Import</a></li>
                 <li><a href="#about">About</a></li>
                 <li><a href="#docs">Docs</a></li>
                 <li><a onClick={this.createDemo}>Demo</a></li>
@@ -540,7 +541,7 @@ class EmailBuilder extends Component {
                 <h1>Please import an email or template file.</h1>
                 <div id="import-input">
                   <div id="import-input__button">Choose File</div>
-                  <div id="import-input__file-name">No file selected.</div>
+                  <div id="import-input__file-name">Select an HTML file to edit from.</div>
                   <input id="import-input__input" type="file" accept=".html" onChange={this.readEmailImport}/>
                 </div>
               </div>
