@@ -439,6 +439,26 @@
   position: relative;
   font-size: 15px; }
 
+#features ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0; }
+  #features ul li {
+    display: inline-block;
+    width: calc(100%/3 - 40px);
+    border: solid 1px #e5e5e5;
+    background-color: #ffffff;
+    text-align: center;
+    padding: 20px; }
+
+#features p {
+  margin: 0; }
+
+#features img {
+  border: solid 1px #e5e5e5;
+  border-radius: 10px;
+  margin: 20px; }
+
 .background--blue {
   background-color: #67809F; }
 

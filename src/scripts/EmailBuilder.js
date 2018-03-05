@@ -563,13 +563,22 @@ class EmailBuilder extends Component {
                 <p><strong className="text--highlight">Email Builder is a single-paged web application that allows its users to create and edit emails from pre-made templates.</strong> It builds a bridge in communication between developer and marketer, making the email creation process more efficient and less frustrating. This app allows developers to create custom templates that can be used by anyone with local access to the file. No coding experience is necessary to use these templates in Email Builder. Anyone can easily go from template to final email. No sign up or log in necessary. Email Builder allows full privacy of information, as all files are locally stored by the user and are never actually uploaded anywhere.</p>
               </div>
             </div>>
-            <div id="about" className="text-block text-block--gray">
+            <div id="features" className="text-block text-block--gray">
               <div className="text-block__wrapper">
                 <h1>Features</h1>
                 <ul>
-                  <li>one</li>
-                  <li>one</li>
-                  <li>one</li>
+                  <li>
+                    <img src="https://raw.githubusercontent.com/tvanhuynh/email-builder/master/src/images/template-blocks.png" />
+                    <br />
+                    <h3>Drag &amp; Drop Template Blocks</h3>
+                    <p>Add blocks of HTML code to the email and rearrange them as you please.</p>
+                  </li>
+                  <li>
+                    <img src="https://raw.githubusercontent.com/tvanhuynh/email-builder/master/src/images/template-blocks.png" />
+                    <br />
+                    <h3>Drag &amp; Drop Template Blocks</h3>
+                    <p>Add blocks of HTML code to the email and rearrange them as you please.</p>
+                  </li>
                 </ul>
               </div>
             </div>

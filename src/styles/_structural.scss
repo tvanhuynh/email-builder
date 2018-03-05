@@ -573,3 +573,31 @@
     position: relative;
     font-size: 15px;
 }
+
+#features {
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+
+        li {
+            display: inline-block;
+            width: calc(100%/3 - 40px);
+            border: solid 1px $gray;
+            background-color: #ffffff;
+            // margin: 40px;
+            text-align: center;
+            padding: 20px;
+        }
+    }
+
+    p {
+        margin: 0;
+    }
+
+    img {
+        border: solid 1px $gray;
+        border-radius: 10px;
+        margin: 20px;
+    }
+}
