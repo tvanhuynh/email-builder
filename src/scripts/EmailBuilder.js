@@ -574,10 +574,40 @@ class EmailBuilder extends Component {
                     <p>Add blocks of HTML code to the email and rearrange them as you please.</p>
                   </li>
                   <li>
-                    <img src="https://raw.githubusercontent.com/tvanhuynh/email-builder/master/src/images/template-blocks.png" />
+                    <img src="https://raw.githubusercontent.com/tvanhuynh/email-builder/master/src/images/move-blocks.png" />
                     <br />
-                    <h3>Drag &amp; Drop Template Blocks</h3>
-                    <p>Add blocks of HTML code to the email and rearrange them as you please.</p>
+                    <h3>Reorganize Blocks of HTML</h3>
+                    <p>Move and remove blocks of HTML up and down, reordering them to fit your layout.</p>
+                  </li>
+                  <li>
+                    <img src="https://raw.githubusercontent.com/tvanhuynh/email-builder/master/src/images/delete-areas.png" />
+                    <br />
+                    <h3>Remove &amp; Put Back</h3>
+                    <p>Remove and clear sections of the layout, with the option of putting the items back in.</p>
+                  </li>
+                  <li>
+                    <img src="https://raw.githubusercontent.com/tvanhuynh/email-builder/master/src/images/text-editor.png" />
+                    <br />
+                    <h3>Edit Text</h3>
+                    <p>Change the text instantly and apply various styles like bold, italic, and underline.</p>
+                  </li>
+                  <li>
+                    <img src="https://raw.githubusercontent.com/tvanhuynh/email-builder/master/src/images/link-editor.png" />
+                    <br />
+                    <h3>Edit Links</h3>
+                    <p>Change call out links with ease, editing both the text and link location.</p>
+                  </li>
+                  <li>
+                    <img src="https://raw.githubusercontent.com/tvanhuynh/email-builder/master/src/images/image-editor.png" />
+                    <br />
+                    <h3>Edit Images</h3>
+                    <p>Easily manipulate images and where they link to. Change the source, link, and alt text!</p>
+                  </li>
+                  <li>
+                    <img src="https://raw.githubusercontent.com/tvanhuynh/email-builder/master/src/images/image-bank.png" />
+                    <br />
+                    <h3>Image Bank</h3>
+                    <p>Easily manipulate images and where they link to. Change the source, link, and alt text!</p>
                   </li>
                 </ul>
               </div>
