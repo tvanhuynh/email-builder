@@ -607,7 +607,19 @@ class EmailBuilder extends Component {
                     <img src="https://raw.githubusercontent.com/tvanhuynh/email-builder/master/src/images/image-bank.png" />
                     <br />
                     <h3>Image Bank</h3>
-                    <p>Easily manipulate images and where they link to. Change the source, link, and alt text!</p>
+                    <p>Select from a bank of images for easy access and to reduce image searching time.</p>
+                  </li>
+                  <li>
+                    <img src="https://raw.githubusercontent.com/tvanhuynh/email-builder/master/src/images/repeatable-elements.png" />
+                    <br />
+                    <h3>Repeatable Elements</h3>
+                    <p>Repeat elements within blocks, like a list. Rearrange and delete them as you see fit.</p>
+                  </li>
+                  <li>
+                    <img src="https://raw.githubusercontent.com/tvanhuynh/email-builder/master/src/images/download.png" />
+                    <br />
+                    <h3>Download HTML</h3>
+                    <p>Immediately generate the usable HTML code or download the file for later editing.</p>
                   </li>
                 </ul>
               </div>
