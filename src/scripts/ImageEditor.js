@@ -16,10 +16,7 @@ class ImageEditor extends Component {
     constructor(props) {
         super(props);
 
-        this.bank = document.createElement('ul');
-        if (this.props.bank) {
-            this.bank.innerHTML = this.props.bank;
-        }
+        this.updateBank(this.props.bank);
     }
 
     componentDidUpdate() {
@@ -88,6 +85,11 @@ class ImageEditor extends Component {
         });
     }
 
+    updateBank = bank => {
+        this.bank = document.createElement('ul');
+        this.bank.innerHTML = bank || '';
+    }
+
     updateImage = () => {
         let target = this.state.target;
         target.setAttribute('src', this.state.src);
@@ -153,9 +155,6 @@ class ImageEditor extends Component {
                                     placeholder="Enter the URL of the image you wish to display."
                                     onChange={this.handleChange}
                                     />
-                                    {/* <button id="editor__image__src__image-database-button">
-                                        Browse
-                                    </button> */}
                                 </div>
                                 <div className="input-container__text-line">
                                     <label htmlFor="editor__image__settings__input__alt">Alt Text:</label>
@@ -180,7 +179,6 @@ class ImageEditor extends Component {
                             </div>
                             <ul
                             id="editor__image__settings__bank"
-                            // ref={input => this.bankRef = input}
                             dangerouslySetInnerHTML={{__html: this.bank.innerHTML}}
                             />
                             <div className="editor__buttons-row">

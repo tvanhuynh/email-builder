@@ -25,3 +25,7 @@
 .material-icon {
     font-family: 'Material Icons';
 }
+
+.no-after::after {
+    content: none !important;
+}

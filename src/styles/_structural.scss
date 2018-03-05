@@ -43,7 +43,7 @@
         letter-spacing: .1em;
         top: 0;
         background-color: $main-color;
-        z-index: 11;
+        z-index: 10;
         border-radius: 8px 8px 0 0;
         display: flex;
         align-items: center;
@@ -510,7 +510,7 @@
         }
     }
 
-    &--blue {
+    &--gray {
         background-color: rgba(0, 0, 0, .075);
     }
 

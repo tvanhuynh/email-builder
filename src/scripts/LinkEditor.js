@@ -11,11 +11,17 @@ class LinkEditor extends Component {
     udpateTarget = target => {
         this.setState({
             target: target,
-            style: target.getAttribute('style'),
             text: target.innerHTML,
             url: target.getAttribute('href'),
         })
-        this.previewLink.setAttribute("style", this.state.style);
+
+        this.computedStyle = window.getComputedStyle(target);
+        let computedStyle = window.getComputedStyle(target);
+        let setStyle = "";
+        for (let i in computedStyle) {
+            setStyle += `${i}: ${computedStyle[i]}`;
+        }
+        this.previewLink.setAttribute("style", setStyle);
     }
 
     handleTextChange = event => {

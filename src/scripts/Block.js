@@ -249,7 +249,9 @@ class Block extends Component {
       this.clearFloatingIcons();
       this.floatingIcons.appendChild(this.addIcon);
       this.floatingIcons.appendChild(this.deleteIcon);
-      if(target.parentNode.getElementsByClassName('repeatable').length > 1) {
+      if(target.parentNode.getElementsByClassName('repeatable').length > 1 &&
+      (target.previousElementSibling.classList.contains('repeatable') || target.nextElementSibling.classList.contains('repeatable'))
+      ) {
         this.floatingIcons.appendChild(this.upIcon);
         this.floatingIcons.appendChild(this.downIcon);
       }
@@ -356,6 +358,16 @@ class Block extends Component {
     // add icon
     this.addIcon.onmousedown = () => {
       let clone = target.cloneNode(true);
+      clone.querySelectorAll('.medium-editor-element').forEach(i => {
+        i.removeAttribute('contenteditable');
+        i.removeAttribute('spellcheck');
+        i.removeAttribute('data-medium-editor-element');
+        i.removeAttribute('aria-multiline');
+        i.removeAttribute('data-medium-editor-editor-index');
+        i.removeAttribute('medium-editor-index');
+        i.removeAttribute('data-placeholder');
+        i.classList.remove('medium-editor-element');
+      })
       clone.onmouseover = this.floatingIconsMove;
       target.parentNode.insertBefore(clone, target);
       this.watchForEdits();
