@@ -4,6 +4,7 @@
   "private": true,
   "homepage": "https://tvanhuynh.github.io/email-builder",
   "dependencies": {
+    "babel-polyfill": "^6.26.0",
     "gh-pages": "^1.1.0",
     "medium-editor": "^5.23.3",
     "node-sass-chokidar": "0.0.3",
