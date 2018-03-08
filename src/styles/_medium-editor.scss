@@ -23,3 +23,8 @@
 .medium-editor-toolbar li .medium-editor-button-active {
     background-color: $lightblue;
 }
+
+.medium-editor-toolbar-form-active {
+    visibility: visible;
+    background-color: $main-color;
+}

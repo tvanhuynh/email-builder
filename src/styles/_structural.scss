@@ -168,6 +168,7 @@
 
     &__exit-icon, &__move-icon, &__move-top-icon, &__move-bottom-icon {
         font-family: 'Material Icons';
+        font-feature-settings: "liga";
         position: absolute;
         transition: all .25s ease;
         background-color: $main-color;
@@ -229,6 +230,7 @@
 
     &__icon {
         font-family: 'Material Icons';
+        font-feature-settings: "liga";
         font-size: 25px;
     }
 
@@ -386,7 +388,6 @@
                     background-repeat: no-repeat;
                     background-position: center;
                     background-size: cover ;
-                    padding-top: calc(100%/4 - 10px - 2px);
                     cursor: pointer;
                     transition: all .25s ease;
 

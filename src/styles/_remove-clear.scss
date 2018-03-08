@@ -19,6 +19,7 @@
 
     &__delete-icon, &__undo-icon, &__add-icon, &__up-icon, &__down-icon {
         font-family: 'Material Icons';
+        font-feature-settings: "liga";
         color: #ffffff;
         font-size: 15px;
         display: flex;

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+var fileSaver = require('file-saver');
 
 class DownloadBox extends Component {
 
@@ -96,7 +97,8 @@ class DownloadBox extends Component {
     }
 
     downloadFile = () => {
-        this.downloadSetUp('New-Email-File.html', "<!DOCTYPE html>\n" + this.documentClone.documentElement.outerHTML);
+        var blob = new Blob([this.documentClone.documentElement.outerHTML], {type: "text/plain;charset=utf-8"});
+        fileSaver.saveAs(blob, "New-Email-File.html");
     }
 
     render() {

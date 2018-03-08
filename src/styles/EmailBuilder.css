@@ -130,6 +130,7 @@
     transition: all .25s ease; }
   .email-block__exit-icon, .email-block__move-icon, .email-block__move-top-icon, .email-block__move-bottom-icon {
     font-family: 'Material Icons';
+    font-feature-settings: "liga";
     position: absolute;
     transition: all .25s ease;
     background-color: #67809F;
@@ -176,6 +177,7 @@
   cursor: pointer; }
   #download__icon {
     font-family: 'Material Icons';
+    font-feature-settings: "liga";
     font-size: 25px; }
   #download__caption {
     font-size: 8px;
@@ -303,7 +305,6 @@
         background-repeat: no-repeat;
         background-position: center;
         background-size: cover;
-        padding-top: calc(100%/4 - 10px - 2px);
         cursor: pointer;
         transition: all .25s ease; }
         #editor__image__settings__bank ul li:hover {
@@ -509,7 +510,8 @@
   color: #00B16A !important; }
 
 .material-icon {
-  font-family: 'Material Icons'; }
+  font-family: 'Material Icons';
+  font-feature-settings: "liga"; }
 
 .no-after::after {
   content: none !important; }
@@ -534,7 +536,9 @@
     width: 100%;
     height: 100%;
     opacity: 0;
-    cursor: pointer; }
+    cursor: pointer;
+    top: 0;
+    left: 0; }
 
 .button {
   position: relative;
@@ -612,6 +616,7 @@
     opacity: 1 !important; }
   #remove-class__delete-icon, #remove-class__undo-icon, #remove-class__add-icon, #remove-class__up-icon, #remove-class__down-icon {
     font-family: 'Material Icons';
+    font-feature-settings: "liga";
     color: #ffffff;
     font-size: 15px;
     display: flex;
@@ -669,6 +674,10 @@ img.editable, img.editable-fixed {
 
 .medium-editor-toolbar li .medium-editor-button-active {
   background-color: #34495E; }
+
+.medium-editor-toolbar-form-active {
+  visibility: visible;
+  background-color: #67809F; }
 
 * {
   box-sizing: border-box; }

@@ -5,6 +5,8 @@
   "homepage": "https://tvanhuynh.github.io/email-builder",
   "dependencies": {
     "babel-polyfill": "^6.26.0",
+    "drag-drop-polyfill": "^2.0.0-rc.0",
+    "file-saver": "^1.3.3",
     "gh-pages": "^1.1.0",
     "medium-editor": "^5.23.3",
     "node-sass-chokidar": "0.0.3",

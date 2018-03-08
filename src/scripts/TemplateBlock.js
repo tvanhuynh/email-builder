@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 class TemplateBlock extends Component {
   templateStartDrag = event => {
-    event.dataTransfer.setData('text/html', this.props.HTML.outerHTML);
+    event.dataTransfer.setData('text', this.props.HTML.outerHTML);
   }
 
   tempalteEndDrag = event => {

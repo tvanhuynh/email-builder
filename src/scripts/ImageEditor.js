@@ -25,6 +25,7 @@ class ImageEditor extends Component {
                 if(!i.children.length) {
                     let src = i.innerHTML;
                     i.style.backgroundImage = `url('${src}')`;
+                    i.style.height = i.clientWidth + 'px';
                     i.onclick = () => {
                         this.setState({src: src});
                         if (this.state.isFixedWidth) {
@@ -32,7 +33,6 @@ class ImageEditor extends Component {
                             img.src = src;
                             let ratio = img.height / img.width;
                             this.setState({height: this.state.width * ratio});
-                            console.log('fixed width');
                         } else if (!this.state.isFixed) {
                             let img = new Image();
                             img.src = src;
