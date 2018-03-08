@@ -28,7 +28,7 @@ Email Builder is a single-paged web application that allows its users to create 
       
     - `<img>` tags will open the image editor, allowing the user to edit the image, alt-text, and link to which the image leads.
     
-    - Container tags, like `<span>` and `<td>` will create a Medium Editor, allowing the user to edit the text directly on the page, with a toolbar of bold, italics, underlink, anchor, and colors set by the user.
+    - Container tags, like `<span>` and `<td>` will create a Medium Editor, allowing the user to edit the text directly on the page, with a toolbar of bold, italics, underline, anchor, and colors set by the user.
 
   - **editable-fixed** — Adding the class “editable-fixed” to an HTML element will make the element editable with fixed variables, according to the element type:
 
