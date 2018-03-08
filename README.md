@@ -28,7 +28,7 @@ Email Builder is a single-paged web application that allows its users to create 
       
     - `<img>` tags will open the image editor, allowing the user to edit the image, alt-text, and link to which the image leads.
     
-    - Container tags, like `<span>` and `<td>` will create a Medium Editor, allowing the user to edit the text directly on the page, with a toolbar of bold, italics, underline, anchor, and colors set by the user.
+    - Text tags, like `<p>` and `<h1>` will create a Medium Editor, allowing the user to edit the text directly on the page, with a toolbar of bold, italics, underline, anchor, and colors set by the user.
 
   - **editable-fixed** — Adding the class “editable-fixed” to an HTML element will make the element editable with fixed variables, according to the element type:
 
@@ -36,7 +36,7 @@ Email Builder is a single-paged web application that allows its users to create 
     
     - `<img>` tags will open the image editor, allowing the user to edit the image, alt-text, and link to which the image leads. The image will, however, retain the height and width attributes set in the template file.
 
-    - Container tags, like `<span>` and `<td>` will create a Medium Editor, allowing the user to edit the text directly on the page, WITHOUT a toolbar. All styling defined in the template will remain.
+    - Text tags, like `<p>` and `<h1>` will create a Medium Editor, allowing the user to edit the text directly on the page, WITHOUT a toolbar. All styling defined in the template will remain.
 
   - **fixed-width** — Adding the class “fixed-width” to an `<img>` element will force whatever image selected to be constrained to the width attribute specified in the template.
 
@@ -45,3 +45,7 @@ Email Builder is a single-paged web application that allows its users to create 
   - **removable** — Adding the class “removable” to an HTML element will allow the user to remove the element entirely from the email. The user does have the option to place it back if they choose.
 
   - **repeatable** — Adding the class “repeatable” to an HTML element will allow the user to duplicate the element, reorder the element with its neighboring “repeatable” class elements, and delete the elements, as they see fit.
+
+  - **colors** — Adding the id "colors" to a list in the body of a template file will make Email Builder parse the list items as colors in the color scheme. Make sure that the list items hold hex colors, like `#ff0000`.
+
+  - **image-bank** — Adding the id "image-bank" to a list in the body of a template file will make Email Builder parse the list as images in the image-bank. This must be a two-level nested, unordered list. The first level must be the title of the images it holds; the second level must be a list of image URLs.

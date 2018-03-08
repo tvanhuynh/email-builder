@@ -666,7 +666,7 @@ class EmailBuilder extends Component {
                   <ul>
                     <li><span className="html-element-text">a</span> tags will open the link editor, allowing the user to edit the text of the hyperlink and the link to which it leads.</li>
                     <li><span className="html-element-text">img</span> tags will open the image editor, allowing the user to edit the image, alt-text, and link to which the image leads.</li>
-                    <li>Container tags, like <span className="html-element-text">span</span> and <span className="html-element-text">td</span> will create a Medium Editor, allowing the user to edit the text directly on the page, with a toolbar of bold, italics, underline, anchor, and colors set by the user.</li>
+                    <li>Text tags, like <span className="html-element-text">p</span> and <span className="html-element-text">h1</span> will create a Medium Editor, allowing the user to edit the text directly on the page, with a toolbar of bold, italics, underline, anchor, and colors set by the user.</li>
                   </ul>
 
                 <h3>editable-fixed </h3>
@@ -676,7 +676,7 @@ class EmailBuilder extends Component {
                   <ul>
                     <li><span className="html-element-text">a</span> tags will open the link editor, allowing the user to edit the text of the hyperlink and the link to which it leads. This will be no different than an <span className="html-element-text">a</span> tag with the class “editable.”</li>
                     <li><span className="html-element-text">img</span> tags will open the image editor, allowing the user to edit the image, alt-text, and link to which the image leads. The image will, however, retain the height and width attributes set in the template file.</li>
-                    <li>Container tags, like <span className="html-element-text">span</span> and <span className="html-element-text">td</span> will create a Medium Editor, allowing the user to edit the text directly on the page, WITHOUT a toolbar. All styling defined in the template will remain.</li>
+                    <li>Text tags, like <span className="html-element-text">p</span> and <span className="html-element-text">h1</span> will create a Medium Editor, allowing the user to edit the text directly on the page, WITHOUT a toolbar. All styling defined in the template will remain.</li>
                   </ul>
 
               <h3>fixed-width </h3>
@@ -697,6 +697,16 @@ class EmailBuilder extends Component {
               <h3>repeatable </h3>
               <p className="class-definition">
                 &mdash; Adding the class “repeatable” to an HTML element will allow the user to duplicate the element, reorder the element with its neighboring “repeatable” class elements, and delete the elements, as they see fit. 
+              </p>
+
+              <h3>colors </h3>
+              <p className="class-definition">
+                &mdash; Adding the id "colors" to a list in the body of a template file will make Email Builder parse the list items as colors in the color scheme. Make sure that the list items hold hex colors, like #ff0000.
+              </p>
+
+              <h3>image-bank </h3>
+              <p className="class-definition">
+                &mdash; Adding the id "image-bank" to a list in the body of a template file will make Email Builder parse the list as images in the image-bank. This must be a two-level nested, unordered list. The first level must be the title of the images it holds; the second level must be a list of image URLs.
               </p>
               </div>
             </div>
