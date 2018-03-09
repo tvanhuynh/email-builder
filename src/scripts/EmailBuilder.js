@@ -28,7 +28,7 @@ class EmailBuilder extends Component {
     document.getElementById('template-code-sample').value = `<!DOCTYPE html>
 <html>
     <head>
-      <style type="text/css>
+      <style type="text/css">
 
         /* All styles will be transfered to the final email. */
 
