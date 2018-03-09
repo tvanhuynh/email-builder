@@ -475,7 +475,9 @@ class EmailBuilder extends Component {
    * @returns {null}
    */
   openLinkEditor = target => {
-    this.linkEditor.udpateTarget(target);
+    if (!target.classList.contains('removable-undo') && !target.classList.contains('clearable-undo')) {
+      this.linkEditor.udpateTarget(target);
+    }
   }
 
 
@@ -485,7 +487,9 @@ class EmailBuilder extends Component {
    * @returns {null}
    */
   openImageEditor = target => {
-    this.imageEditor.updateTarget(target)
+    if (!target.classList.contains('removable-undo') && !target.classList.contains('clearable-undo')) {
+      this.imageEditor.updateTarget(target)
+    }
   }
 
 
