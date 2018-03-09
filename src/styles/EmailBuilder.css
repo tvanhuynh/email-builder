@@ -107,8 +107,7 @@
   font-family: 'Montserrat', sans-serif; }
 
 .email-block {
-  position: relative;
-  overflow: hidden; }
+  position: relative; }
   .email-block:hover .email-block__exit-icon {
     opacity: 1;
     right: calc(50% - 300px - 50px); }
