@@ -48,6 +48,17 @@ class DownloadBox extends Component {
             i.remove();
         });
 
+        // destroy styles
+        this.documentClone.querySelectorAll('style').forEach(i => {
+            if (!i.classList.contains('user-style')) {
+                i.remove();
+            }
+        })
+
+        // destroy links
+        this.documentClone.querySelectorAll('link').forEach(i => i.remove());
+
+
         // remove titles
         this.documentClone.querySelectorAll('img').forEach(i => i.setAttribute('title', ''));
 
